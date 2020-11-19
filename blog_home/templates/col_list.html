@@ -1,0 +1,178 @@
+{% extends './index.html' %}
+{% block up %}
+{% load static %}
+{% load hometags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="always">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="publish" content="2019-08-19 19:27:00">
+    <meta name="report" content='{"pid":"i","disabled":"true"}'>
+    <title> {{ request.session.userinfo.username }}__个人中心 </title>
+    <link rel="stylesheet" href="../../../static/css/skeleton.css">
+    <link rel="stylesheet" href="../../../static/css/content_toolbar.css">
+    <link href="../../../static/css/app.b5445e30ac68cb79629a874a5f99.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../static/css/bootstrap.min.css">
+    <link  href="../../../static/layui/css/layui.css"  rel="stylesheet">
+     <script type="text/javascript" src="../../../static/layui/layui.all.js"></script>
+    <script src="../../../static/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+     <link rel="stylesheet" type="text/css" href="{% static 'webuploader/webuploader.css' %}" />
+     <link rel="stylesheet" href="../../../static/css/blog_code-c3a0c33d5c.css">
+    <link rel="stylesheet" href="../../../static/css/paging-e040f0c7c8.css">
+    <link rel="stylesheet" href="../../../static/css/chart-3456820cac.css">
+    <script src="../../../static/js/hm.js"></script>
+    <link rel="stylesheet" href="../../../static/css/detail-f27ec51f6e.min.css">
+    <style>
+        .lis {
+            border: rgb(225,225,230) 1px solid;
+            margin-left: 1px;
+            margin-top: -8px;
+        }
+        .l_title {
+            margin-left: 20px;
+            font-size: 20px;
+            font-weight: 800;
+        }
+        .nr {
+            margin-left: 20px;
+            color: #999999;
+        }
+        .nrc {
+            margin-left: 20px;
+            color: rgb(245,140,40);
+        }
+        .icon_right{
+            float: right;
+            font-size: 30px;
+            text-align: center;
+            margin-top: -30px;
+            color: rgb(245,140,40);
+        }
+        .icon_back {
+            font-size: 23px;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+{% csrf_token %}
+{% endblock %}
+
+{% block down %}
+
+<div style="margin-top: 60px">
+    <div id="app">
+    <!---->
+    <div data-v-357a65ed="" class="container view">
+        <div data-v-357a65ed="" class="left_box">
+            <ul data-v-357a65ed="" class="aside">
+                <li data-v-357a65ed="" class="">
+                    <a data-v-357a65ed="" href="/userprofile" class="zl">个人资料</a>
+                </li>
+                <li data-v-357a65ed="" class="router-link-exact-active router-link-active">
+                    <a data-v-357a65ed="" href="/userprofile/collection-list" class="zl">我的收藏</a>
+                </li>
+                <li data-v-357a65ed=""><a data-v-357a65ed="" href="/userprofile/myblog"  data-report-click="{&quot;mod&quot;:&quot;popu_790&quot;,&quot;dest&quot;:&quot;https://mp.csdn.net/console/article&quot;,&quot;extend1&quot;:&quot;我的博客&quot;}"
+                    class="zl">我的博客</a>
+                </li>
+
+                <li data-v-357a65ed="" class="">
+                    <a data-v-357a65ed="" href="/userprofile/mycomment"  class="zl">评论管理</a>
+                </li>
+            </ul>
+        </div>
+        <div class="view-container">
+            <div  class="cont view">
+                <div  class="right_cont">
+                    <a href="/userprofile/collection-list">
+                        <h3  class="title"><i class="layui-icon layui-icon-left icon_back"></i>回到收藏夹列表</h3>
+                    </a>
+
+                    <div style="margin-top: 19px"></div>
+                    <div class="container " style="border-left: #777777 1px solid ;width: 83%;height: 500px;margin-left: 200px;z-index: 1000">
+                        {% for i in bgls %}
+                        <div class="clearfix lis" style="">
+                            <a href="/user_{{ i.uid.userid }}/blog_{{ i.id }}">
+                                <span class="l_title">{{ i.title }}</span>
+                            </a>
+                            <br><br>
+                            <span class="nr">
+                                {{ i.ginfo }}
+                            </span>
+                            <a class="nrc" id="{{ i.id }}" onclick="del_col($(this))">
+                                取消收藏
+                            </a>
+                            <a href="/user_{{ i.uid.userid }}/blog_{{ i.id }}">
+                                <i class="layui-icon layui-icon-right icon_right"></i>
+                            </a>
+                        </div>
+                        <div style="height: 43px"></div>
+                        {% endfor %}
+                        {% if not  bgls  %}
+                            <center>
+                                <span style="font-size: 20px;color: #F58C28;font-weight: 800">
+                                    收藏夹是空的哦，快去添加喜欢的博客进来吧！
+                                </span>
+                            </center>
+                        {% endif %}
+                        <center>
+                            <div id="commentPage" class="pagination-box ">
+                                <div class="ui-paging-container">
+                                    <ul>
+                                        {% PageShow total_pages request %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </center>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+    //取消收藏
+    var del_col = function(obj){
+      var del_id = obj.attr('id');
+      var ifdel =  layer.confirm('该博客将取消收藏，确认操作吗？',{
+          btn:['确认','取消'],
+          anim:4,
+          shade: [0.8, '#393D49'],
+          skin: 'layui-layer-warm',
+          btn1:function () {
+              $.post('cancel_col',{csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val(),delid:del_id},function (data) {
+                  if (data.msg == 1){
+                      location.href='{{ request.path }}'
+                  }else {
+                      layer.msg(data.msg)
+                  }
+              })
+          }
+      })
+    };
+
+    // 博客分页点击
+    $('.ui-paging-container ul li').click(function () {
+        if (  $(this).attr('href') == undefined ){
+
+        }else{
+            location.href = $(this).attr('href')
+        }
+    });
+</script>
+
+</body>
+{% endblock %}

@@ -1,0 +1,419 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block title  %}新增用户{% endblock %}
+{% block link %}
+    <!-- Favicon-->
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+    <!-- Bootstrap Core Css -->
+    <link href="{% static 'plugins/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="{% static 'plugins/node-waves/waves.css' %}" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="{% static 'plugins/animate-css/animate.css' %}" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="{% static 'css/themes/all-themes.css' %}" rel="stylesheet" />
+    <!-- Colorpicker Css -->
+    <link href="{% static 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css' %}" rel="stylesheet" />
+
+    <!-- Dropzone Css -->
+    <link href="{% static 'plugins/dropzone/dropzone.css' %}" rel="stylesheet">
+
+    <!-- Multi Select Css -->
+    <link href="{% static 'plugins/multi-select/css/multi-select.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Spinner Css -->
+    <link href="{% static 'plugins/jquery-spinner/css/bootstrap-spinner.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Tagsinput Css -->
+    <link href="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Select Css -->
+    <link href="{% static 'plugins/bootstrap-select/css/bootstrap-select.css' %}" rel="stylesheet" />
+
+    <!-- noUISlider Css -->
+    <link href="{% static 'plugins/nouislider/nouislider.min.css' %}" rel="stylesheet" />
+ <link href="{% static 'css/bannerstyle.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+
+{% block main_body %}
+<div class="container-fluid">
+      <ol class="breadcrumb breadcrumb-bg-orange">
+				<li><a href="">首页</a></li>
+				<li class="active">新增用户</li>
+      </ol>
+
+      <!-- 文章基础信息编辑 -->
+      <div class="row clearfix">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="card">
+                  <div class="body">
+                      <div class="header">
+
+                          <h2>
+                              <strong><i class="material-icons" style="font-size: 25px">account_circle</i>&nbsp;&nbsp; 新增用户</strong>
+                              <small>请在下方填写用户的基本信息</small>
+                          </h2>
+                      </div>
+                      <br>
+                      <form id="mainFrom" action="" method="post">
+                      {% csrf_token %}
+                        <!--用户名-->
+                      <div class="row clearfix">
+
+                          <div class="col-md-6">
+                            <p>
+                              <b>用户昵称</b>
+                            </p>
+                              <div class="input-group">
+                                  <span class="input-group-addon">
+                                      <i class="material-icons">perm_identity</i>
+                                  </span>
+                                  <div class="col-md-8">
+                                      <div class="form-line">
+                                          <input type="text" class="form-control date" placeholder="请输入用户昵称" name="username" >
+                                     </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                      <span id="links_name" style="color: #777777"></span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                          <!--手机号-->
+                      <div class="row clearfix">
+
+                          <div class="col-md-6">
+                            <p>
+                            <b>用户手机号</b>
+                          </p>
+                              <div class="input-group">
+                                  <span class="input-group-addon">
+                                      <i class="material-icons">phone</i>
+                                  </span>
+                                  <div class="col-md-8">
+                                  <div class="form-line">
+                                      <input type="text" class="form-control date" placeholder="请输入手机号" name="phone">
+                                  </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                      <span id="links_path" style="color: #777777"></span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <!--密码-->
+                      <div class="row clearfix">
+
+                          <div class="col-md-6">
+                            <p>
+                            <b>用户密码</b>
+                          </p>
+                              <div class="input-group">
+                                  <span class="input-group-addon">
+                                      <i class="material-icons">toys</i>
+                                  </span>
+                                  <div class="col-md-8">
+                                  <div class="form-line">
+                                      <input type="password" class="form-control date" placeholder="请输入密码" name="password" >
+                                  </div>
+
+                              </div>
+                          </div>
+                      </div>
+                      <!--确认密码-->
+                    
+                          <div class="col-md-6">
+                            <p>
+                            <b>确认密码</b>
+                          </p>
+                              <div class="input-group">
+                                  <span class="input-group-addon">
+                                      <i class="material-icons">toys</i>
+                                  </span>
+                                  <div class="col-md-8">
+                                  <div class="form-line">
+                                      <input type="password" class="form-control date" placeholder="请确认密码" name="repassword" >
+                                  </div>
+                              </div>
+                          </div>
+                          </div>
+                     
+                      </div>
+
+    
+
+                    <!--用户头像-->
+                    <div class="row clearfix">
+                      <div class="col-md-6">
+                        <p>
+                        <b><i class="material-icons">person_pin</i>请选择头像</b>
+                      </p>
+                          <div class="input-group">
+
+                              <div class="col-md-8">
+
+                              <div class="form-line">
+                                  <img id="portrait" src="http://www.sucaijishi.com/uploadfile/2014/0524/20140524012042216.png" alt="" width="100" height="100">
+                                  <input type="text"  hidden name="head_url" value="">
+                                  <br><br>
+                                   <div  class="input-group">
+
+
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary">
+                                             <i class="layui-icon">&#xe67c;</i>上传图片
+                                            <div id="filePicker" name="head_img"    >
+
+                                            </div>
+                                        </span>
+                                    </label>
+
+                                       <script>
+                                           window.onload=function () {
+                                               $('[name="file"]').attr('onchange','showPreview(this)')
+                                           }
+                                       </script>
+
+
+
+                                 </div>
+                              </div>
+
+                          </div>
+                      </div>
+                      </div>
+                 </div>
+                          <!--图片处理JS-->
+                           <script type="text/javascript">
+                                function showPreview(source) {
+                                  var file = source.files[0];
+                                  if(window.FileReader) {
+                                      var fr = new FileReader();
+                                      console.log(fr);
+                                      var portrait = document.getElementById('portrait');
+                                      fr.onloadend = function(e) {
+                                        portrait.src = e.target.result;
+                                      };
+                                      fr.readAsDataURL(file);
+                                      portrait.style.display = 'block';
+                                  }
+                                }
+                            </script>
+
+
+
+                      <div class="row clearfix">
+                          <div class="col-md-12">
+                              <a type="button" id="submin_btn" class="btn btn-block bg-red  waves-effect"><i class="material-icons">send</i>&nbsp;提交</a>
+                          </div>
+                      </div>
+
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+{% endblock %}
+
+{% block endlinks %}
+
+
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.js' %}"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="{% static 'plugins/bootstrap-select/js/bootstrap-select.js' %}"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+
+    <!-- Bootstrap Colorpicker Js -->
+    <script src="{% static '' %}plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+
+    <!-- Dropzone Plugin Js -->
+    <script src="{% static 'plugins/dropzone/dropzone.js' %}"></script>
+
+    <!-- Input Mask Plugin Js -->
+    <script src="{% static 'plugins/jquery-inputmask/jquery.inputmask.bundle.js' %}"></script>
+
+    <!-- Multi Select Plugin Js -->
+    <script src="{% static 'plugins/multi-select/js/jquery.multi-select.js' %}"></script>
+
+    <!-- Jquery Spinner Plugin Js -->
+    <script src="{% static 'plugins/jquery-spinner/js/jquery.spinner.js' %}"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="{% static 'plugins/node-waves/waves.js' %}"></script>
+
+
+
+    <!-- Bootstrap Tags Input Plugin Js -->
+    <script src="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.js' %}"></script>
+
+    <!-- noUISlider Plugin Js -->
+
+
+    <!-- TinyMCE -->
+    <script src="{% static 'plugins/tinymce/tinymce.js' %}"></script>
+
+    <!-- Custom Js -->
+    <script src="{% static 'js/admin.js' %}"></script>
+
+
+    <!-- Demo Js -->
+    <script src="{% static 'js/demo.js' %}"></script>
+   <script src="{% static 'plugins/sweetalert/sweetalert.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'webuploader/webuploader.js' %}"></script>
+  <script type="text/javascript">{{ jscode|default:"" |safe }}</script>
+<script>
+      //上传图片按钮
+	var uploader = WebUploader.create({
+	// 选完文件后，是否自动上传。
+	    auto: true,
+
+	    // swf文件路径
+	    swf: "{% static 'webuploader/Uploader.swf' %}",
+
+	    // 文件接收服务端。
+	    server: "/user/updatauser/",
+
+	    // 选择文件的按钮。可选。
+	    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+	    pick: '#filePicker',
+
+	    // 只允许选择图片文件。
+	    accept: {
+	        title: 'Images',
+	        extensions: 'gif,jpg,jpeg,bmp,png',
+	        mimeTypes: 'image/*'
+	    }
+	});
+
+	//上传进度
+	uploader.on( 'uploadProgress', function( file, percentage ) {
+    console.log(percentage * 100 + '%');
+
+    });
+    //上传成功之后请求网络地址填入alt
+	uploader.on( 'uploadSuccess', function( file, response ) {
+    $('#portrait').attr('alt',response.file_name);
+    $('[name="head_url"]').attr('value',response.file_name)
+});
+
+    //********************************************************************************
+
+    //验证
+    var checkpassword = false;
+    var linkspath = false;
+    var linksname = false;
+    //判空
+      var firstpwd ='';
+
+    $('[name=password]').blur(function () {
+        if(check($(this).val())){
+            firstpwd=$(this).val()
+            console.log(firstpwd)
+        }else{
+            layer.msg('密码不能为空或包含空格',{anim:6,icon:2})
+            checkpassword=false
+        }
+    });
+    $('[name=repassword]').blur(function () {
+        if($(this).val()===firstpwd){
+            $('#pwd').css('color','green')
+            $('#pwd').text('*')
+            checkpassword=true
+        }else{
+            layer.msg('两次输入密码不一致',{anim:6,icon:2})
+            $('#pwd').css('color','red')
+            $('#pwd').text('*')
+            checkpassword=false
+        }
+    });
+    //验证name
+    $('[name="username"]').click(function () {
+        $('#links_name').css('color','#777777');
+        $('#links_name').text('请输入用户名');
+    });
+    $('[name="username"]').blur(function () {
+        if(check($(this).val())){
+            linksname = true
+        }else{
+            $('#links_name').css('color','red')
+            $('#links_name').text('用户名不能为空或包含空格！')
+            linksname=false
+        }
+
+    })
+    //验证手机号
+    $('[name=phone]').click(function () {
+        $('#links_path').css('color','#777777')
+        $('#links_path').text('请输入手机号')
+    })
+
+    $('[name=phone]').blur(function () {
+        if(check($(this).val())){
+            linkspath = true
+
+        }else{
+            $('#links_path').css('color','red')
+            $('#links_path').text('手机号不能为空或包含空格！')
+            linkspath =false
+        }
+
+    })
+
+
+    function check(obj) {
+        // var isspace =/\s/
+        if(obj.indexOf(' ') == -1&& obj !=''){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    $('#submin_btn').click(function () {
+        if(linkspath && linksname && checkpassword){
+            $('#mainFrom').submit()
+        }else{
+            if(linksname){
+                $('#links_path').css('color','red')
+                $('#links_path').text('!请输入手机号')
+                swal('请输入手机号！','手机号不能为空！','error')
+            }
+            else if(linkspath){
+                $('#links_name').css('color','red')
+                $('#links_name').text('!请输入用户名')
+                swal('请输入用户名！','用户名不能为空！','error')
+            }else if(checkpassword==false){
+                layer.msg('密码输入有误',{anim:6,icon:2})
+                 $('#pwd').css('color','red')
+                 $('#pwd').text('*')
+            }
+            else{
+                $('#links_path').css('color','red')
+                $('#links_path').text('!请输入手机号')
+                $('#links_name').css('color','red')
+                $('#links_name').text('!请输入用户名')
+                swal('请输入正确格式的用户名和手机号！','用户名和手机号不能为空！','error')
+            }
+        }
+    })
+</script>
+
+{% endblock %}

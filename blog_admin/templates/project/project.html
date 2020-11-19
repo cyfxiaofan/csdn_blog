@@ -1,0 +1,1251 @@
+{% extends '../base.html' %}
+{% load static %}
+{% load adminpagetag %}
+{% block title %}项目列表{% endblock %}
+{% block link %}
+ <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+
+  <!-- Bootstrap Core Css -->
+  <link href="{% static 'plugins/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+  <!-- Waves Effect Css -->
+  <link href="{% static 'plugins/node-waves/waves.css' %}" rel="stylesheet" />
+
+  <!-- Animation Css -->
+  <link href="{% static 'plugins/animate-css/animate.css' %}" rel="stylesheet" />
+
+  <!-- JQuery DataTable Css -->
+  <link href="{% static 'plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css' %}" rel="stylesheet" />
+
+  <!-- Custom Css -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+
+  <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+  <link href="{% static 'css/themes/all-themes.css' %}" rel="stylesheet" />
+<!-- Colorpicker Css -->
+    <link href="{% static 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css' %}" rel="stylesheet" />
+
+    <!-- Dropzone Css -->
+    <link href="{% static 'plugins/dropzone/dropzone.css' %}" rel="stylesheet">
+
+    <!-- Multi Select Css -->
+    <link href="{% static 'plugins/multi-select/css/multi-select.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Spinner Css -->
+    <link href="{% static 'plugins/jquery-spinner/css/bootstrap-spinner.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Tagsinput Css -->
+    <link href="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Select Css -->
+    <link href="{% static 'plugins/bootstrap-select/css/bootstrap-select.css' %}" rel="stylesheet" />
+
+    <!-- noUISlider Css -->
+    <link href="{% static 'plugins/nouislider/nouislider.min.css' %}" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'plugins/ckeditor/skins/moono/editor.css' %}">
+	<style>
+    .img-div img {
+        height: 120px;
+        width:140px;
+        float: left;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+    }
+    .img-div {
+        height: 200px;
+        float: left;
+        display: table-cell;
+        position: relative;
+    }
+	</style>
+{% endblock %}
+
+
+
+{% block main_body %}
+<div class="container-fluid">
+{% csrf_token %}
+  <ol class="breadcrumb breadcrumb-bg-orange">
+  <li><a href="{% url 'index:index_show' %}">首页</a></li>
+  <li class="active">项目列表</li>
+  </ol>
+  <!-- Basic Examples -->
+  <!-- Exportable Table -->
+  <!-- Basic Table -->
+  <div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="card">
+        <div class="header">
+          <h2 style="margin-top: 35px;margin-left: 20px">
+            <strong><i class="material-icons" style="font-size: 25px">vpn_key</i>&nbsp;&nbsp; 项目管理</strong>
+            <small>支持行业词,项目名称,注意仅支持单个关键词</small>
+          </h2>
+        </div>
+
+        <form action="" method="GET">
+          <div class="row clearfix">
+            <div class="col-md-3 col-md-push-8" style="margin-top: -55px">
+              <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="material-icons" style="font-size: 25px">vpn_key</i>
+                </span>
+                <div class="form-line">
+                  <input type="text" class="form-control date" placeholder="搜索关键词" name="keywords" value="{{ keywords| default:'' }}">
+                </div>
+                  <button type="submit" style="margin-right: -50px;z-index: 9;float: right;margin-top: -6px" class="btn bg-red btn-circle waves-effect waves-circle waves-float">
+                                    <i class="material-icons">search</i>
+                    </button>
+              </div>
+
+            </div>
+
+          </div>
+        </form>
+
+       <div style="height: 60px"></div>
+
+
+        <div class="container" style="width: 1500px;">
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th>序号</th>
+                          <th width="100px">标题名称</th>
+                          <th>一级行业</th>
+                          <th>二级行业</th>
+                          <th>关键字</th>
+                          <th>创建时间</th>
+                          <th>启用状态</th>
+                          <th>操作</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for recode in result %}
+                          <tr>
+                              <th scope="row" class="editid">{{ recode.id }}</th>
+                              <td class="l_title">{{ recode.title }}</td>
+                              <td class="f_industryname">{{ recode.industry_first }}</td>
+                              <td class="s_industry_name">{{ recode.industry_second }}</td>
+                              <td class="l_keyword">{{ recode.keyword }}</td>
+                              <td class="l_time">{{ recode.create_date }}</td>
+                              <td>
+                                  {% if recode.status == 1 %}
+                                      <div class="switch cgsta" id="{{ recode.id }}">
+                                          <label>禁用<input class="ltype" type="checkbox" onclick="delfunc(this)" checked><span class="lever"></span>开启</label>
+                                      </div>
+                                  {% else %}
+                                      <div class="switch cgsta" id="{{ recode.id }}">
+                                          <label>禁用<input class="ltype" type="checkbox" onclick="delfunc(this)"><span class="lever"></span>开启</label>
+                                      </div>
+                                  {% endif %}
+                              </td>
+                              <td>
+                                  <a href="" type="btn" class="btn btn-info btn-xs editbtn" data-toggle="modal" data-target="#myModal" >编辑</a>
+                                  <a href="" type="btn" class="btn btn-warning btn-xs bannerbtn" data-toggle="modal" data-target="#myModal_banner" >轮播图</a>
+                              </td>
+                          </tr>
+                      {% endfor %}
+
+                  </tbody>
+              </table>
+          </div>
+          <nav>
+              <center>
+                  <ul class="pagination">
+                      {% PageShow totalpages request %}
+                  </ul>
+              </center>
+          </nav>
+      </div>
+    </div>
+</div>
+</div>
+
+
+<!--模态 编辑-->
+<!-- Modal -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="myModal" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="background-color: rgba(0,0,0,0.3)">
+      <!--填充-->
+        <div class="container-fluid">
+    <ol class="breadcrumb breadcrumb-bg-orange" style="text-align: center">
+        <li class="active">项目编辑</li>
+    </ol>
+
+    <!-- 文章基础信息编辑 -->
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="body">
+
+                    <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                                <li role="presentation" class="active"><a href="#info_md_col_4" data-toggle="tab">项目基本信息</a></li>
+                                <li role="presentation"><a href="#introduce_md_col_4" data-toggle="tab">项目介绍</a></li>
+                    </ul>
+
+                    <br>
+
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in active" id="info_md_col_4">
+                                {% csrf_token %}
+                                <input type="hidden" id="thiseditid" name="aid" value="{{ project_info.id }}">
+                                <input type="hidden" name="type" value="1">
+                                <!-- start 项目信息 -->
+
+                                <div class="row clearfix">
+                                    <div class="col-md-12">
+                                        <p>
+                                            <b>请输入项目名称</b>
+
+                                        </p>
+                                        <div class="input-group">
+                                 <span class="input-group-addon">
+                                    <i class="material-icons">pie_chart_outlined&nbsp;</i>
+                                  </span>
+                                            <div class="col-md-4">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control date" placeholder="项目名称"
+                                                           name="brandname" value="{{ project_info.title }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span id="user_name" style="color: #777777"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix">
+                                    <!--layui-form 渲染下拉框-->
+                                    <div class="layui-form">
+                                        <div class="col-md-3">
+                                            <p>
+                                                <b>一级行业</b>
+                                            </p>
+                                            <select name="fname" id="fcselector" class="shortselect"
+                                                    lay-filter="firstlevel">
+                                                <option value="0"> --</option>
+                                                {% for recode in f_industry %}
+                                                <option value="{{ recode.id }}">{{ recode.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <p>
+                                                <b>二级行业</b>
+                                            </p>
+                                            <select name="sname" id="scselector" class="shortselect" lay-filter="secondlevel">
+                                                <option value="0"> --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <!-- end 项目信息 -->
+                                <!-- start 项目信息 -->
+                                <div class="row clearfix">
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                              <span class="input-group-addon">
+                                                          <i class="material-icons">pie_chart_outlined&nbsp;</i>
+						                                  </span>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control date" placeholder="主营产品"
+                                                       name="product" value="{{ project_info.product }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+						                                  <span class="input-group-addon">
+						                                      <i class="material-icons">pie_chart_outlined&nbsp;</i>
+						                                  </span>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control date" placeholder="加盟地区, 默认全国"
+                                                       name="jiamengarea" value="{{ project_info.area }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-md-3">
+                                        <div class="input-group spinner" data-trigger="spinner">
+                                            <div class="form-line">
+                                                <p>
+                                                    <b>最小加盟金额</b>
+                                                </p>
+                                                <input type="text" name="minmoney" class="form-control text-center"
+                                                       placeholder="1" value="{{ project_info.min_money }}"
+                                                       data-rule="quantity">
+                                            </div>
+                                            <span class="input-group-addon">
+			                                            <a href="javascript:;" class="spin-up" data-spin="up"><i
+                                                                class="glyphicon glyphicon-chevron-up"></i></a>
+			                                            <a href="javascript:;" class="spin-down" data-spin="down"><i
+                                                                class="glyphicon glyphicon-chevron-down"></i></a>
+			                                        </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group spinner" data-trigger="spinner">
+                                            <div class="form-line">
+                                                <p>
+                                                    <b>最大加盟金额</b>
+                                                </p>
+                                                <input type="text" name="maxmoney" class="form-control text-center"
+                                                       placeholder="1" value="{{ project_info.max_money }}"
+                                                       data-rule="quantity">
+                                            </div>
+                                            <span class="input-group-addon">
+			                                            <a href="javascript:;" class="spin-up" data-spin="up"><i
+                                                                class="glyphicon glyphicon-chevron-up"></i></a>
+			                                            <a href="javascript:;" class="spin-down" data-spin="down"><i
+                                                                class="glyphicon glyphicon-chevron-down"></i></a>
+			                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+						                                  <span class="input-group-addon">
+						                                      <i class="material-icons">pie_chart_outlined&nbsp;</i>
+						                                  </span>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control date"
+                                                       placeholder="项目关键词, 请使用空格分隔关键词" name="keywordss"
+                                                       value="{{ project_info.keyword | default:''}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <textarea rows="4" class="form-control no-resize"
+                                                          placeholder="项目描述信息, 字数200以内" name="desc">{{ project_info.description }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end 项目信息 -->
+
+                                <!-- start 企业信息 -->
+                                <div class="row clearfix">
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                              <span class="input-group-addon">
+                                                  <i class="material-icons">pie_chart_outlined&nbsp;</i>
+                                              </span>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control date" placeholder="企业名称"
+                                                       name="companyname" value="{{ project_info.company }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+						                                  <span class="input-group-addon">
+						                                      <i class="material-icons">pie_chart_outlined&nbsp;</i>
+						                                  </span>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control date" placeholder="企业发源地"
+                                                       name="birthplace" value="{{ project_info.birthplace }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="input-group">
+						                                  <span class="input-group-addon">
+						                                      <i class="material-icons">pie_chart_outlined&nbsp;</i>
+						                                  </span>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control date" placeholder="企业成立时间"
+                                                       name="establish" value="{{ project_info.establish }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-md-3">
+                                        <div class="input-group spinner" data-trigger="spinner">
+                                            <div class="form-line">
+                                                <p>
+                                                    <b>加盟店数量</b>
+                                                </p>
+                                                <input type="text" name="storejiameng" class="form-control text-center"
+                                                       placeholder="1" value="{{ project_info.store_jiameng }}"
+                                                       data-rule="quantity">
+                                            </div>
+                                            <span class="input-group-addon">
+			                                            <a href="javascript:;" class="spin-up" data-spin="up"><i
+                                                                class="glyphicon glyphicon-chevron-up"></i></a>
+			                                            <a href="javascript:;" class="spin-down" data-spin="down"><i
+                                                                class="glyphicon glyphicon-chevron-down"></i></a>
+			                                        </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group spinner" data-trigger="spinner">
+                                            <div class="form-line">
+                                                <p>
+                                                    <b>直营店数量</b>
+                                                </p>
+                                                <input type="text" name="storezhiying" class="form-control text-center"
+                                                       placeholder="1" value="{{ project_info.store_zhiying }}"
+                                                       data-rule="quantity">
+                                            </div>
+                                            <span class="input-group-addon">
+			                                            <a href="javascript:;" class="spin-up" data-spin="up"><i
+                                                                class="glyphicon glyphicon-chevron-up"></i></a>
+			                                            <a href="javascript:;" class="spin-down" data-spin="down"><i
+                                                                class="glyphicon glyphicon-chevron-down"></i></a>
+			                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                                    <!--用户头像-->
+                    <div class="row clearfix">
+                      <div class="col-md-6">
+                        <p>
+                        <b>LOGO图</b>
+                      </p>
+                          <div class="input-group">
+                              <div class="col-md-8">
+
+                                  <img id="portrait" src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=465975785,3696372986&fm=26&gp=0.jpg" alt="" width="800" height="400">
+                                  <input type="text"  hidden name="logo" value="">
+                                  <br><br>
+                                   <div  class="input-group">
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary" style="width: 800px">
+                                             <i class="layui-icon">&#xe67c;</i>上传图片
+                                            <div id="filePicker">
+
+                                            </div>
+                                        </span>
+                                    </label>
+
+                                 </div>
+                          </div>
+                      </div>
+                      </div>
+                 </div>
+                          <!--图片处理JS-->
+                           <script type="text/javascript">
+                                function showPreview(source) {
+                                  var file = source.files[0];
+                                  if(window.FileReader) {
+                                      var fr = new FileReader();
+                                      console.log(fr);
+                                      var portrait = document.getElementById('portrait');
+                                      fr.onloadend = function(e) {
+                                        portrait.src = e.target.result;
+                                      };
+                                      fr.readAsDataURL(file);
+                                      portrait.style.display = 'block';
+                                  }
+                                }
+                            </script>
+
+                                <hr>
+
+                                <div class="row clearfix">
+                                    <div class="col-md-12">
+                                        <a type="submit" id="submin_btn" class="btn bg-red waves-effect btn-block">添加项目
+                                        </a>
+                                    </div>
+                                </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="introduce_md_col_4">
+
+		                              {% csrf_token %}
+		                              <input  type="hidden" id="contains_id" name="aid">
+		                              <input type="hidden" name="types" value="2">
+		                              <div class="header">
+						                              项目介绍
+						                              <small>请使用富文本编辑器对项目介绍内容进行编写, 会自动转为html代码</small>
+						                          </h2>
+						                      </div>
+						                      <div class="row clearfix">
+						                          <div class="col-md-12">
+						                              <textarea class="ckeditor" name="introduce" cols="30">
+						                                  {{ project_info.introduce | default:"<h2>请在此处编辑项目介绍</h2>" |safe  }}
+						                              </textarea>
+						                          </div>
+						                      </div>
+				                          <div class="row clearfix">
+						                          <div class="col-md-12">
+						                              <button id="con_submit" class="btn bg-red btn-block waves-effect">更新介绍</button>
+                                                  </div>
+                                          </div>
+
+                          </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <!--end填充-->
+  </div>
+</div>
+</div>
+
+
+
+<!-- 模态2 轮播图 -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="myModal_banner" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="background-color: rgba(0,0,0,0.3)">
+      <!--填充-->
+
+        <div class="container-fluid">
+{% csrf_token %}
+  <ol class="breadcrumb breadcrumb-bg-blue" style="text-align: center">
+     <li class="active">编辑轮播图</li>
+  </ol>
+</div>
+
+<div class="container-fluid">
+      <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="card">
+                  <div class="header">
+                      <h2>
+                          实际轮播图区域
+                          <small>双击图片即可删除(拖拽换顺序后需点更新生效)</small>
+                      </h2>
+                  </div>
+                  <input type="text" hidden id="banner_id">
+
+                    <div class="body">
+                      <div class="row bannerlist" id="img_ul">
+                          <div class="col-md-3 img-div draggable-element" >
+                              <img ondblclick="delthisbanner(this)" src=""  class="img-responsive ">
+                          </div>
+                          <div class="col-md-3 img-div draggable-element" >
+                              <img ondblclick="delthisbanner(this)" src=""  class="img-responsive ">
+                          </div>
+                          <div class="col-md-3 img-div draggable-element" >
+                              <img ondblclick="delthisbanner(this)" src=""  class="img-responsive ">
+                          </div>
+                          <div class="col-md-3 img-div draggable-element" >
+                              <img ondblclick="delthisbanner(this)" src=""  class="img-responsive ">
+                          </div>
+                          <div class="col-md-3 img-div draggable-element" >
+                              <img ondblclick="delthisbanner(this)" src=""  class="img-responsive ">
+                          </div>
+                          <div class="col-md-3 img-div draggable-element" >
+                              <img ondblclick="delthisbanner(this)" src=""  class="img-responsive ">
+                          </div>
+                          <div class="col-md-3 img-div draggable-element" >
+                              <img ondblclick="delthisbanner(this)" src=""  class="img-responsive ">
+                          </div>
+                          <div class="col-md-3 img-div draggable-element" >
+                              <img ondblclick="delthisbanner(this)" src=""  class="img-responsive ">
+                          </div>
+                      </div>
+
+                        <!--<div class="row">-->
+                                <!--<ul>-->
+                                    <!--<li  class="col-md-3" style="text-align: center;float: left;"><i class="material-icons">looks_one</i></li>-->
+                                    <!--<li  class="col-md-3" style="text-align: center;float: left;"><i class="material-icons">looks_two</i></li>-->
+                                    <!--<li  class="col-md-3" style="text-align: center;float: left;"><i class="material-icons">looks_3</i></li>-->
+                                    <!--<li  class="col-md-3" style="text-align: center;float: left;"><i class="material-icons">looks_4</i></li>-->
+                                <!--</ul>-->
+                        <!--</div>-->
+                        <!--<div style="height: 100px;"></div>-->
+
+                        <hr>
+                            <div class="row" id="img_btn">
+                                <button type="button" class="btn btn-info btn -xs btn-block" id="updatebanner">更新轮播图</button>
+                            </div>
+                  </div>
+              </div>
+            <div class="card">
+                  <div class="header">
+                      <h2>
+                          待选择轮播图区域
+                          <small>点击图片即可删除</small>
+                      </h2>
+                  </div>
+
+									<div class="row">
+
+                                    <label class="input-group-btn " >
+                                        <span class="btn btn-info btn -xs btn-block " style="width:860px;margin-left: 20px;">
+                                             <i class="layui-icon" style="font-size: 15px">&#xe67c;</i>上传图片
+                                            <div id="filePickers" >
+
+                                            </div>
+                                        </span>
+                                    </label>
+
+                                        <script>
+                                            window.onload=function () {
+                                                $('.webuploader-pick').remove()
+                                            }
+                                        </script>
+
+
+					              <!--用来存放item-->
+					              <table id="fileList" class="uploader-list">
+                                        <td></td>
+                                  </table>
+                                        <div style="height: 10px"></div>
+                    </div>
+              </div>
+          </div>
+      </div>
+
+</div>
+
+    <!--end填充-->
+  </div>
+</div>
+</div>
+{% endblock %}
+
+{% block endlinks %}
+ <!-- Jquery Core Js -->
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+    <script async="" src="https://www.google-analytics.com/analytics.js"></script>
+    <script src="{% static 'plugins/bootstrap-notify/bootstrap-notify.js' %}"></script>
+    <script src="{% static 'js/pages/ui/dialogs.js' %}"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.js' %}"></script>
+
+
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="{% static 'plugins/node-waves/waves.js' %}"></script>
+
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="{% static 'plugins/jquery-datatable/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/buttons.flash.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/jszip.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/pdfmake.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/vfs_fonts.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/buttons.print.min.js' %}"></script>
+  <!-- Jquery Spinner Plugin Js -->
+    <script src="{% static 'plugins/jquery-spinner/js/jquery.spinner.js' %}"></script>
+
+    <!-- Custom Js -->
+    <script src="{% static 'js/admin.js' %}"></script>
+    <script src="{% static 'js/pages/tables/jquery-datatable.js' %}"></script>
+    <!-- delJS -->
+    <script src="{% static 'js/delfunc.js' %}"></script>
+    <!-- Demo Js -->
+    <script src="{% static 'plugins/ckeditor/ckeditor.js' %}"></script>
+<script src="{% static 'plugins/ckeditor/config.js' %}"></script>
+<script src="{% static 'plugins/ckeditor/styles.js' %}"></script>
+<script type="text/javascript" src="{% static 'webuploader/webuploader.js' %}"></script>
+    <script src="{% static 'js/demo.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/drag-arrange.js' %}"></script>
+<script>
+    //上传图片
+    var uploader = WebUploader.create({
+	// 选完文件后，是否自动上传。
+	    auto: true,
+
+	    // swf文件路径
+	    swf: "{% static 'webuploader/Uploader.swf' %}",
+
+	    // 文件接收服务端。
+	    server: "/user/updatauser/",
+
+	    // 选择文件的按钮。可选。
+	    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+	    pick: '#filePicker',
+
+	    // 只允许选择图片文件。
+	    accept: {
+	        title: 'Images',
+	        extensions: 'gif,jpg,jpeg,bmp,png',
+	        mimeTypes: 'image/*'
+	    }
+	});
+
+	//上传进度
+	uploader.on( 'uploadProgress', function( file, percentage ) {
+    console.log(percentage * 100 + '%');
+
+    });
+    //上传成功之后请求网络地址填入alt
+uploader.on( 'uploadSuccess', function( file, response ) {
+    $('#portrait').attr('src',response.file_name);
+    $('[name="logo"]').attr('value',response.file_name)
+});
+//******************编辑按钮****************************************
+    //绑定编辑按钮
+    $('.editbtn').click(function () {
+
+        // 为img 添加 shopPreview函数
+         $('[name="file"]').eq(0).attr('onchange','showPreview(this)');
+         $('.webuploader-pick').remove();
+
+
+
+        flag = $(this);
+        var editid = $(this).parents('tr').find('.editid').text();
+        $('#thiseditid').val(editid);
+        $('#contains_id').val(editid);
+        $.ajax({
+            async: true,
+            type:'get',
+            url:"{% url 'project:editproject' %}",
+            dataType: 'json',
+            data:{'editid':editid},
+            success:function (data) {
+                //定义form  为要渲染的区域
+                var form = layui.form;
+                $('#fcselector').empty();
+                $('#fcselector').append(data.industry_first);
+                $('#scselector').empty();
+                $('#scselector').append(data.industry_second);
+                checksecondindustry = true;
+                checkfirstindustry = true;
+                //重新渲染
+                //将这个局部重新渲染
+                form.render('select');
+                $('[name=brandname]').val(data.title);
+                $('[name=logo]').attr('value',data.logo);
+                $('#portrait').attr('src',data.logo);
+                $('[name=minmoney]').val(data.min_money);
+                $('[name=maxmoney]').val(data.max_money);
+                $('[name=companyname]').val(data.company);
+                $('[name=birthplace]').val(data.birthplace)
+                $('[name=storejiameng]').val(data.store_jiameng);
+                $('[name=storezhiying]').val(data.store_zhiying);
+                $('[name=establish]').val(data.establish);
+                $('[name=jiamengarea]').val(data.area);
+                $('[name=keywordss]').val(data.keyword);
+                $('[name=product]').val(data.product);
+                $('[name=desc]').val(data.description);
+                CKEDITOR.instances[name='introduce'].setData(data.introduce);
+
+                //验证name
+                $('#user_name').css('color', '#777777');
+                $('#user_name').html('<i class="material-icons" style="font-size: 15px">done</i>&nbsp;&nbsp;&nbsp;项目名称验证通过');
+                checkprojectname = true
+
+            }
+        })
+    });
+//******************************************************************************
+         //监听下拉框
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('select(firstlevel)', function (data) {
+                if(data.value != 0){
+                    checksecondindustry = true;
+                    checkfirstindustry = true
+                }else{
+                    checksecondindustry = false;
+                    checkfirstindustry = false
+                }
+                $('#scselector').empty();
+                console.log(data.value); //得到被选中的值
+                var fid = data.value;
+                $.ajax({
+                    async: true,
+                    type: 'get',
+                    url: "{% url 'project:getsecondindustry' %}",
+                    dataType: 'json',
+                    data: {fid: fid},
+                    success: function (data) {
+                        $('#scselector').empty();
+                        $('#scselector').append(data.msg);
+                        //重新渲染
+                        form.render()
+                    }
+                })
+            });
+            form.render('select');
+        });
+//*********************************************************
+     //对 projectname 的验证
+    var checkprojectname = false;
+    var checkfirstindustry = false;
+    var checksecondindustry = false;
+
+    //验证函数
+    function check(obj) {
+        // var isspace =/\s/
+        if (obj.indexOf(' ') == -1 && obj != '' && obj != 0) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    //验证用户名
+    $('[name=brandname]').click(function () {
+        $('#user_name').css('color', '#777777');
+        $('#user_name').html('<i class="material-icons" style="font-size: 15px">add_alert</i>&nbsp;&nbsp;&nbsp;请输入项目名称')
+    });
+    $('[name=brandname]').blur(function () {
+        if (check($(this).val())) {
+            var checkid = $('#thiseditid').val();
+            console.log(checkid);
+            $.ajax({
+                async: true,
+                type: 'get',
+                url: "{% url 'project:checkeditproject' %}",
+                dataType: 'json',
+                data: {'checkid':checkid,'projectname': $(this).val()},
+                success: function (data) {
+                    if (data.msg == 1) {
+                        $('#user_name').css('color', '#777777');
+                        $('#user_name').html('<i class="material-icons" style="font-size: 15px">done</i>&nbsp;&nbsp;&nbsp;项目名称验证通过');
+                        checkprojectname = true
+                    } else {
+                        $('#user_name').css('color', 'red');
+                        $('#user_name').html('<i class="material-icons" style="font-size: 15px">error_outline</i>&nbsp;&nbsp;项目名称已存在！');
+                        checkprojectname = false
+                    }
+                }
+            })
+        } else {
+            $('#user_name').css('color', 'red');
+            $('#user_name').html('<i class="material-icons" style="font-size: 15px">error_outline</i>&nbsp;&nbsp;项目名称不能为空或包含空格！');
+            checkprojectname = false
+        }
+
+    });
+    //checkfirstindustry
+    $('[name=fname]').change(function () {
+        if (check($(this).val())) {
+            checkfirstindustry = true
+        } else {
+            checkfirstindustry = false
+        }
+    });
+    // checksecondindustry
+    $('[name=sname]').change(function () {
+        if (check($(this).val())) {
+            checksecondindustry = true
+        } else {
+            checksecondindustry = false
+        }
+    });
+
+
+    //提交对变量的验证
+    $('#submin_btn').click(function () {
+        if (checkfirstindustry && checksecondindustry && checkprojectname) {
+            var first_industry = $('.layui-input').eq(0).attr('value');
+            var second_industry = $('.layui-input').eq(1).attr('value');
+            var industryname = $('[name=brandname]').val();
+            var keywords = $('[name=keywordss]').val();
+            console.log(first_industry,second_industry,keywords);
+            $.ajax({
+                async:true,
+                dataType:'json',
+                type:'POST',
+                url:"{% url 'project:editproject' %}",
+                data:{
+                    csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val(),
+                    aid : $('[name=aid]').val(),
+                    type : $('[name=type]').val(),
+                    fname : $('[name=fname]').val(),
+                    sname : $('[name=sname]').val(),
+                    brandname: $('[name=brandname]').val(),
+                    logo : $('[name=logo]').attr('value'),
+                    minmoney : $('[name=minmoney]').val(),
+                    maxmoney : $('[name=maxmoney]').val(),
+                    companyname : $('[name=companyname]').val(),
+                    birthplace : $('[name=birthplace]').val(),
+                    storejiameng : $('[name=storejiameng]').val(),
+                    storezhiying : $('[name=storezhiying]').val(),
+                    establish : $('[name=establish]').val(),
+                    jiamengarea: $('[name=jiamengarea]').val(),
+                    keywords: $('[name=keywordss]').val(),
+                    product: $('[name=product]').val(),
+                    desc: $('[name=desc]').val(),
+                },
+                success:function (data) {
+                    if(data.msg ==1){
+                           flag.parents('tr').find('.l_title').text(industryname);
+                           flag.parents('tr').find('.f_industryname').text(first_industry);
+                           flag.parents('tr').find('.s_industry_name').text(second_industry);
+                           flag.parents('tr').find('.l_keyword').text(keywords);
+                           swal("修改成功!", "修改信息已生效", "success");
+                           $('#myModal').modal('hide')
+                    }else {
+                        swal("修改失败!",data.msg, "error");
+                        $('#myModal').modal('hide')
+                    }
+                }
+            })
+
+        } else if (checkfirstindustry === false) {
+            swal('请输选择一级行业分类！', '行业分类不能为空！', 'error')
+        } else if (checksecondindustry === false) {
+            swal('请输选择二级行业分类！', '行业分类不能为空！', 'error')
+        } else if (checkprojectname === false) {
+            $('#user_name').css('color', 'red');
+            $('#user_name').html('<i class="material-icons" style="font-size: 15px">error_outline</i>&nbsp;&nbsp;&nbsp;请输入合法的项目名称');
+            swal('请输入项目名称！', '项目名称不合法！', 'error')
+        }
+
+    });
+    var editor=CKEDITOR.replace('introduce');
+
+    $('#con_submit').click(function () {
+        var introduce = editor.document.getBody().getHtml();
+        console.log(introduce);
+        $.ajax({
+            async:true,
+            dataType:'json',
+            type:'POST',
+            url:"{% url 'project:editproject' %}",
+            data:{
+                csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val(),
+                type:$('[name=types]').val(),
+                aid:$('#contains_id').val(),
+                introduce:introduce,
+            },
+            success:function (data) {
+                 if(data.msg ==1){
+                       swal("修改成功!", "修改信息已生效", "success");
+                       $('#myModal').modal('hide')
+                    }else {
+                        swal("修改失败!",data.msg, "error");
+                        $('#myModal').modal('hide')
+                    }
+            }
+        })
+    })
+</script>
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+<script>
+    //绑定轮播图按钮
+    $('.bannerbtn').click(function () {
+        var pid= $(this).parents('tr').find('.editid').text();
+        $('#banner_id').val(pid);
+        console.log(pid);
+        $.ajax({
+            async:true,
+            type:'GET',
+            url:"{% url 'project:banner_project' %}",
+            dataType:'json',
+            data:{
+                pid:pid
+            },
+            success:function (data) {
+                $('.bannerlist div img').eq(0).attr('src',data[0]);
+                $('.bannerlist div img').eq(1).attr('src',data[1]);
+                $('.bannerlist div img').eq(2).attr('src',data[2]);
+                $('.bannerlist div img').eq(3).attr('src',data[3]);
+                $('.bannerlist div img').eq(4).attr('src',data[4]);
+                $('.bannerlist div img').eq(5).attr('src',data[5]);
+                $('.bannerlist div img').eq(6).attr('src',data[6]);
+                $('.bannerlist div img').eq(7).attr('src',data[7])
+            }
+        })
+    });
+
+        //拖动事件
+      $(function thiss() {
+          $('.draggable-element').arrangeable();
+
+      });
+</script>
+<!--$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$-->
+<script>
+    //上传图片按钮
+	var uploaders = WebUploader.create({
+	// 选完文件后，是否自动上传。
+	    auto: true,
+
+	    // swf文件路径
+	    swf: "{% static 'webuploader/Uploader.swf' %}",
+
+	    // 文件接收服务端。
+	    server: "/user/updatauser/",
+
+	    // 选择文件的按钮。可选。
+	    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+	    pick: '#filePickers',
+
+	    // 只允许选择图片文件。
+	    accept: {
+	        title: 'Images',
+	        extensions: 'gif,jpg,jpeg,bmp,png',
+	        mimeTypes: 'image/*'
+	    }
+	});
+
+	// 当有文件添加进来的时候
+uploaders.on('fileQueued', function( file ) {
+    var $li = $(
+            '<td id="' + file.id + '" class="file-item thumbnail " style="display: inline-block;margin-left: 40px">' +
+                '<img  class="thisbannerimg" style="width: 120px;height: 140px">' + '<button type="button" class="btn bg-blue btn-block  waves-effect reonline">启用</button>'+
+            '</td>'
+            ),
+        $img = $li.find('img');
+
+    // $list为容器jQuery实例
+    $('.uploader-list  td:first-child').before($li)
+
+    // 创建缩略图
+    // 如果为非图片文件，可以不用调用此方法。
+    // thumbnailWidth x thumbnailHeight 为 100 x 100
+    uploaders.makeThumb( file, function( error, src ) {
+        if ( error ) {
+            $img.replaceWith('<span>不能预览</span>');
+            return;
+        }
+
+        $img.attr( 'src', src );
+    }, 100, 100 );
+});
+
+// 文件上传过程中创建进度条实时显示。
+uploaders.on( 'uploadProgress', function( file, percentage ) {
+    var $li = $( '#'+file.id ),
+        $percent = $li.find('.progress span');
+
+    // 避免重复创建
+    if ( !$percent.length ) {
+        $percent = $('<p class="progress"><span></span></p>').appendTo( $li ).find('span');
+    }
+
+    $percent.css( 'width', percentage * 100 + '%' );
+});
+
+// 文件上传成功，给item添加成功class, 用样式标记上传成功。
+uploaders.on( 'uploadSuccess', function( file, response ) {
+    $( '#'+file.id ).addClass('upload-state-done').find("img").attr('alt',response.file_name);
+});
+
+// 文件上传失败，显示上传出错。
+uploaders.on( 'uploadError', function( file ) {
+    var $li = $( '#'+file.id ),
+        $error = $li.find('div.error');
+
+    // 避免重复创建
+    if ( !$error.length ) {
+        $error = $('<div class="error"></div>').appendTo( $li );
+    }
+
+    $error.text('上传失败');
+});
+
+// 完成上传完了，成功或者失败，先删除进度条。
+uploaders.on( 'uploadComplete', function( file ) {
+    $( '#'+file.id ).find('.progress').remove();
+});
+
+ //up_img双击删除事件
+    function delthisbanner(obj) {
+        var delbanner_img = $(obj).attr('src');
+        if($(obj).attr('src') == 'http://placehold.it/500x300'){
+            layer.msg('该位置没有图片！',{anim:6})
+        }else{
+         swal({
+        title: "确定删除吗?",
+        text: "删除之后前台页面将不显示该数据!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "确定!",
+        cancelButtonText: "取消!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+         }, function (isConfirm) {
+        //如果点击的是确定按钮！ 发送ajax   csrf_token
+        if (isConfirm) {
+            $(obj).attr('src','http://placehold.it/500x300');
+            var img_1 = $('.bannerlist div img').eq(0).attr('src');
+            var img_2 = $('.bannerlist div img').eq(1).attr('src');
+            var img_3 = $('.bannerlist div img').eq(2).attr('src');
+            var img_4 = $('.bannerlist div img').eq(3).attr('src');
+            var img_5 = $('.bannerlist div img').eq(4).attr('src');
+            var img_6 = $('.bannerlist div img').eq(5).attr('src');
+            var img_7 = $('.bannerlist div img').eq(6).attr('src');
+            var img_8 = $('.bannerlist div img').eq(7).attr('src');
+
+            $.ajax({
+            async:true,  //同步
+            type:'post',
+            url:"{% url 'project:delbanner' %}",
+            dataType:'json',  //返回的数据类型
+            data:{
+                'csrfmiddlewaretoken':$('[name="csrfmiddlewaretoken"]').val(),
+                pid :$('#banner_id').val(),
+                img_1:img_1,
+                img_2:img_2,
+                img_3:img_3,
+                img_4:img_4,
+                img_5:img_5,
+                img_6:img_6,
+                img_7:img_7,
+                img_8:img_8,
+            },
+            success:function (data) {
+                if (data.msg==1){
+                    //定义空字符串  生成td 添加到下方
+                    var end_html='';
+                    end_html = '<td  class="file-item thumbnail upload-state-done" style="display: inline-block;margin-left: 50px">\n' +
+'                                          <img  src='+delbanner_img+' alt='+delbanner_img+' class="thisbannerimg" style="width: 120px;height: 140px">\n' +
+'                                          <button type="button" class="btn bg-blue btn-block  waves-effect reonline">启用</button>\n' +
+'                               </td>'
+                    $('.uploader-list  td:first-child').before(end_html);
+                    swal("已删除!", "这条数据将不在在前台页面显示.", "success");
+                }else{
+                    swal("删除失败!", data.msg, "error");
+                }
+            }
+                 })
+        } else {
+                swal("操作已取消！", "您取消了操作", "error");
+        }
+    });
+         }
+}
+
+//逻辑删除
+   $('body').on('click','.thisbannerimg',function () {
+       var flag=$(this);
+        swal({
+        title: "确定删除吗?",
+        text: "删除之后前此面将不显示该图片",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "确定!",
+        cancelButtonText: "取消!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+         }, function (isConfirm) {
+        //如果点击的是确定按钮！ 发送ajax
+        if (isConfirm) {
+                flag.parents('td').remove();
+            swal("已删除！", "删除成功", "success");
+        } else {
+                swal("操作已取消！", "您取消了操作", "error");
+        }
+    });
+
+   });
+//启用按钮
+    $('body').on('click','.reonline',function () {
+        //判断图片是 500X300 的个数
+        if($("img[src='http://placehold.it/500x300']").length > 0){
+              //取出其 url
+              var pre_upimg_url = $(this).prev().attr('alt');
+              //取出第一个 图片是500X300的元素
+              var prechangeimg = $('img[src="http://placehold.it/500x300"]').eq(0);
+              //替换其 src
+              prechangeimg.attr('src',pre_upimg_url);
+              //启用之后删除
+              $(this).parents('td').remove()
+              //获取当前列表的 id
+                var img_1 = $('.bannerlist div img').eq(0).attr('src');
+                var img_2 = $('.bannerlist div img').eq(1).attr('src');
+                var img_3 = $('.bannerlist div img').eq(2).attr('src');
+                var img_4 = $('.bannerlist div img').eq(3).attr('src');
+                var img_5 = $('.bannerlist div img').eq(4).attr('src');
+                var img_6 = $('.bannerlist div img').eq(5).attr('src');
+                var img_7 = $('.bannerlist div img').eq(6).attr('src');
+                var img_8 = $('.bannerlist div img').eq(7).attr('src');
+            //发送 ajax
+             $.ajax({
+                 async:true,
+                 type:'post',
+                 url:"{% url 'project:updatabanner' %}",
+                 data:{
+                     'csrfmiddlewaretoken':$('[name="csrfmiddlewaretoken"]').val(),
+                     pid :$('#banner_id').val(),
+                    img_1:img_1,
+                    img_2:img_2,
+                    img_3:img_3,
+                    img_4:img_4,
+                    img_5:img_5,
+                    img_6:img_6,
+                    img_7:img_7,
+                    img_8:img_8,
+                 },
+                 dataType:'json',
+                 success:function (data) {
+                     if(data.msg==1){
+                         swal("启用成功","当前图片已生效,轮播图已更新",'success')
+                     }else{
+                         swal("启用失败",data.msg,'error')
+                     }
+                 }
+             })
+
+        }else{
+            layer.msg("没有多余位置了！",{anim:6})
+        }
+
+    });
+
+     //更新按钮
+    $('#updatebanner').click(function () {
+        var img_1 = $('.bannerlist div img').eq(0).attr('src');
+        var img_2 = $('.bannerlist div img').eq(1).attr('src');
+        var img_3 = $('.bannerlist div img').eq(2).attr('src');
+        var img_4 = $('.bannerlist div img').eq(3).attr('src');
+        var img_5 = $('.bannerlist div img').eq(4).attr('src');
+        var img_6 = $('.bannerlist div img').eq(5).attr('src');
+        var img_7 = $('.bannerlist div img').eq(6).attr('src');
+        var img_8 = $('.bannerlist div img').eq(7).attr('src');
+        //发送 ajax
+         $.ajax({
+                 async:true,
+                 type:'post',
+                 url:"{% url 'project:updatabanner' %}",
+                 data:{
+                     'csrfmiddlewaretoken':$('[name="csrfmiddlewaretoken"]').val(),
+                     pid :$('#banner_id').val(),
+                    img_1:img_1,
+                    img_2:img_2,
+                    img_3:img_3,
+                    img_4:img_4,
+                    img_5:img_5,
+                    img_6:img_6,
+                    img_7:img_7,
+                    img_8:img_8,
+                 },
+                 dataType:'json',
+                 success:function (data) {
+                     if(data.msg==1){
+                         swal("启用成功","当前图片已生效,轮播图已更新",'success')
+                     }else{
+                         swal("启用失败",data.msg,'error')
+                     }
+                 }
+             })
+    })
+</script>
+{% endblock %}

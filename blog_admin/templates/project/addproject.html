@@ -1,0 +1,565 @@
+{% extends "../base.html" %}
+{% load static %}
+{% block title %}新增项目{% endblock %}
+{% block link %}
+<!-- Favicon-->
+<link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+<!-- Bootstrap Core Css -->
+<link href="{% static 'plugins/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+<!-- Waves Effect Css -->
+<link href="{% static 'plugins/node-waves/waves.css' %}" rel="stylesheet"/>
+
+<!-- Animation Css -->
+<link href="{% static 'plugins/animate-css/animate.css' %}" rel="stylesheet"/>
+
+<link href="{% static 'plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css' %}"
+      rel="stylesheet"/>
+
+<!-- Custom Css -->
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+<!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+<link href="{% static 'css/themes/all-themes.css' %}" rel="stylesheet"/>
+<!-- Colorpicker Css -->
+<link href="{% static 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css' %}" rel="stylesheet"/>
+
+<!-- Dropzone Css -->
+<link href="{% static 'plugins/dropzone/dropzone.css' %}" rel="stylesheet">
+
+<!-- Multi Select Css -->
+
+<!-- Bootstrap Spinner Css -->
+<link href="{% static 'plugins/jquery-spinner/css/bootstrap-spinner.css' %}" rel="stylesheet">
+
+<!-- Bootstrap Tagsinput Css -->
+<link href="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet">
+
+
+<!-- noUISlider Css -->
+<link href="{% static 'plugins/nouislider/nouislider.min.css' %}" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="{% static 'webuploader/webuploader.css' %}"/>
+{% endblock %}
+
+
+
+{% block main_body %}
+<div class="container-fluid">
+
+    <ol class="breadcrumb breadcrumb-bg-orange ">
+        <li><a href="">首页</a></li>
+        <li class="active">新增项目</li>
+    </ol>
+
+    <!-- 文章基础信息编辑 -->
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="body">
+
+                    <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#info_md_col_4" data-toggle="tab"><i class="material-icons">pie_chart_outlined&nbsp;</i>项目基本信息</a>
+                        </li>
+                    </ul>
+
+                    <br>
+
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in active" id="info_md_col_4">
+                            <form id="mainForm" action="" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="aid" value="{{ project_info.id }}">
+                                <input type="hidden" name="type" value="1">
+                                <!-- start 项目信息 -->
+
+                                <div class="row clearfix">
+                                    <div class="col-md-8">
+                                        <p>
+                                            <b>请输入项目名称</b>
+
+                                        </p>
+                                        <div class="input-group">
+                                 <span class="input-group-addon">
+                                    <i class="material-icons">pie_chart_outlined&nbsp;</i>
+                                  </span>
+                                            <div class="col-md-4">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control date" placeholder="项目名称"
+                                                           name="brandname" value="{{ project_info.title }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span id="user_name" style="color: #777777"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix">
+                                    <!--layui-form 渲染下拉框-->
+                                    <div class="layui-form">
+                                        <div class="col-md-3">
+                                            <p>
+                                                <b>一级行业</b>
+                                            </p>
+                                            <select name="fname" id="fcselector" class="shortselect"
+                                                    lay-filter="firstlevel">
+                                                <option value="0"> --</option>
+                                                {% for recode in f_industry %}
+                                                <option value="{{ recode.id }}">{{ recode.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <p>
+                                                <b>二级行业</b>
+                                            </p>
+                                            <select name="sname" id="scselector" class="shortselect">
+                                                <option value="0"> --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <!-- end 项目信息 -->
+                                <!-- start 项目信息 -->
+                                <div class="row clearfix">
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                              <span class="input-group-addon">
+                                                          <i class="material-icons">pie_chart_outlined&nbsp;</i>
+						                                  </span>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control date" placeholder="主营产品"
+                                                       name="product" value="{{ project_info.product }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+						                                  <span class="input-group-addon">
+						                                      <i class="material-icons">pie_chart_outlined&nbsp;</i>
+						                                  </span>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control date" placeholder="加盟地区, 默认全国"
+                                                       name="jiamengarea" value="{{ project_info.area }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-md-3">
+                                        <div class="input-group spinner" data-trigger="spinner">
+                                            <div class="form-line">
+                                                <p>
+                                                    <b>最小加盟金额</b>
+                                                </p>
+                                                <input type="text" name="minmoney" class="form-control text-center"
+                                                       placeholder="1" value="{{ project_info.min_money }}"
+                                                       data-rule="quantity">
+                                            </div>
+                                            <span class="input-group-addon">
+			                                            <a href="javascript:;" class="spin-up" data-spin="up"><i
+                                                                class="glyphicon glyphicon-chevron-up"></i></a>
+			                                            <a href="javascript:;" class="spin-down" data-spin="down"><i
+                                                                class="glyphicon glyphicon-chevron-down"></i></a>
+			                                        </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group spinner" data-trigger="spinner">
+                                            <div class="form-line">
+                                                <p>
+                                                    <b>最大加盟金额</b>
+                                                </p>
+                                                <input type="text" name="maxmoney" class="form-control text-center"
+                                                       placeholder="1" value="{{ project_info.max_money }}"
+                                                       data-rule="quantity">
+                                            </div>
+                                            <span class="input-group-addon">
+			                                            <a href="javascript:;" class="spin-up" data-spin="up"><i
+                                                                class="glyphicon glyphicon-chevron-up"></i></a>
+			                                            <a href="javascript:;" class="spin-down" data-spin="down"><i
+                                                                class="glyphicon glyphicon-chevron-down"></i></a>
+			                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+						                                  <span class="input-group-addon">
+						                                      <i class="material-icons">pie_chart_outlined&nbsp;</i>
+						                                  </span>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control date"
+                                                       placeholder="项目关键词, 请使用空格分隔关键词" name="keywords"
+                                                       value="{{ project_info.keyword | default:''}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <textarea rows="4" class="form-control no-resize"
+                                                          placeholder="项目描述信息, 字数200以内" name="desc">{{ project_info.description }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end 项目信息 -->
+
+                                <!-- start 企业信息 -->
+                                <div class="row clearfix">
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                              <span class="input-group-addon">
+                                                  <i class="material-icons">pie_chart_outlined&nbsp;</i>
+                                              </span>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control date" placeholder="企业名称"
+                                                       name="companyname" value="{{ project_info.company }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+						                                  <span class="input-group-addon">
+						                                      <i class="material-icons">pie_chart_outlined&nbsp;</i>
+						                                  </span>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control date" placeholder="企业发源地"
+                                                       name="birthplace" value="{{ project_info.birthplace }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="input-group">
+						                                  <span class="input-group-addon">
+						                                      <i class="material-icons">pie_chart_outlined&nbsp;</i>
+						                                  </span>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control date" placeholder="企业成立时间"
+                                                       name="establish" value="{{ project_info.establish }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-md-3">
+                                        <div class="input-group spinner" data-trigger="spinner">
+                                            <div class="form-line">
+                                                <p>
+                                                    <b>加盟店数量</b>
+                                                </p>
+                                                <input type="text" name="storejiameng" class="form-control text-center"
+                                                       placeholder="1" value="{{ project_info.store_jiameng }}"
+                                                       data-rule="quantity">
+                                            </div>
+                                            <span class="input-group-addon">
+			                                            <a href="javascript:;" class="spin-up" data-spin="up"><i
+                                                                class="glyphicon glyphicon-chevron-up"></i></a>
+			                                            <a href="javascript:;" class="spin-down" data-spin="down"><i
+                                                                class="glyphicon glyphicon-chevron-down"></i></a>
+			                                        </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group spinner" data-trigger="spinner">
+                                            <div class="form-line">
+                                                <p>
+                                                    <b>直营店数量</b>
+                                                </p>
+                                                <input type="text" name="storezhiying" class="form-control text-center"
+                                                       placeholder="1" value="{{ project_info.store_zhiying }}"
+                                                       data-rule="quantity">
+                                            </div>
+                                            <span class="input-group-addon">
+			                                            <a href="javascript:;" class="spin-up" data-spin="up"><i
+                                                                class="glyphicon glyphicon-chevron-up"></i></a>
+			                                            <a href="javascript:;" class="spin-down" data-spin="down"><i
+                                                                class="glyphicon glyphicon-chevron-down"></i></a>
+			                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                                    <!--用户头像-->
+                    <div class="row clearfix">
+                      <div class="col-md-6">
+                        <p>
+                        <b>LOGO图</b>
+                      </p>
+                          <div class="input-group">
+                              <div class="col-md-8">
+
+                                  <img id="portrait" src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=465975785,3696372986&fm=26&gp=0.jpg" alt="" width="800" height="400">
+                                  <input type="text"  hidden name="logo" value="">
+                                  <br><br>
+                                   <div  class="input-group">
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary" style="width: 800px">
+                                             <i class="layui-icon">&#xe67c;</i>上传图片
+                                            <div id="filePicker">
+
+                                            </div>
+                                        </span>
+                                    </label>
+
+                                       <script>
+                                           window.onload=function () {
+                                               $('[name="file"]').attr('onchange','showPreview(this)')
+                                               $('.webuploader-pick').remove()
+                                           }
+                                       </script>
+                                 </div>
+                          </div>
+                      </div>
+                      </div>
+                 </div>
+                          <!--图片处理JS-->
+                           <script type="text/javascript">
+                                function showPreview(source) {
+                                  var file = source.files[0];
+                                  if(window.FileReader) {
+                                      var fr = new FileReader();
+                                      console.log(fr);
+                                      var portrait = document.getElementById('portrait');
+                                      fr.onloadend = function(e) {
+                                        portrait.src = e.target.result;
+                                      };
+                                      fr.readAsDataURL(file);
+                                      portrait.style.display = 'block';
+                                  }
+                                }
+                            </script>
+
+                                <hr>
+
+                                <div class="row clearfix">
+                                    <div class="col-md-12">
+                                        <a type="submit" id="submin_btn" class="btn bg-red waves-effect btn-block">添加项目
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #END# CKEditor -->
+{% endblock %}
+{% block endlinks %}
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+<!-- Bootstrap Core Js -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.js' %}"></script>
+
+
+<!-- Slimscroll Plugin Js -->
+<script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+
+<!-- Bootstrap Colorpicker Js -->
+<script src="{% static '' %}plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+
+<!-- Dropzone Plugin Js -->
+<script src="{% static 'plugins/dropzone/dropzone.js' %}"></script>
+
+<!-- Input Mask Plugin Js -->
+<script src="{% static 'plugins/jquery-inputmask/jquery.inputmask.bundle.js' %}"></script>
+
+
+<!-- Jquery Spinner Plugin Js -->
+<script src="{% static 'plugins/jquery-spinner/js/jquery.spinner.js' %}"></script>
+
+<!-- Waves Effect Plugin Js -->
+<script src="{% static 'plugins/node-waves/waves.js' %}"></script>
+
+
+<!-- Bootstrap Tags Input Plugin Js -->
+<script src="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.js' %}"></script>
+
+<!-- TinyMCE -->
+<script src="{% static 'plugins/tinymce/tinymce.js' %}"></script>
+
+<!-- Custom Js -->
+<script src="{% static 'js/admin.js' %}"></script>
+
+<!-- Bootstrap Material Datetime Picker Plugin Js -->
+<!-- Demo Js -->
+<script src="{% static 'js/demo.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'webuploader/webuploader.js' %}"></script>
+
+  <script type="text/javascript">{{ jscode|default:"" |safe }}</script>
+
+
+
+<script>
+//********************************************************************************
+//logo上传
+	var uploader = WebUploader.create({
+	// 选完文件后，是否自动上传。
+	    auto: true,
+
+	    // swf文件路径
+	    swf: "{% static 'webuploader/Uploader.swf' %}",
+
+	    // 文件接收服务端。
+	    server: "/user/updatauser/",
+
+	    // 选择文件的按钮。可选。
+	    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+	    pick: '#filePicker',
+
+	    // 只允许选择图片文件。
+	    accept: {
+	        title: 'Images',
+	        extensions: 'gif,jpg,jpeg,bmp,png',
+	        mimeTypes: 'image/*'
+	    }
+	});
+
+	//上传进度
+	uploader.on( 'uploadProgress', function( file, percentage ) {
+    console.log(percentage * 100 + '%');
+
+    });
+    //上传成功之后请求网络地址填入alt
+	uploader.on( 'uploadSuccess', function( file, response ) {
+    $('#portrait').attr('alt',response.file_name);
+    $('[name="logo"]').attr('value',response.file_name)
+});
+
+    //********************************************************************************
+    //对 projectname 的验证
+    var checkprojectname = false;
+    var checkfirstindustry = false;
+    var checksecondindustry = false;
+
+    //验证函数
+    function check(obj) {
+        // var isspace =/\s/
+        if (obj.indexOf(' ') == -1 && obj != '' && obj != 0) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    //验证用户名
+    $('[name=brandname]').click(function () {
+        $('#user_name').css('color', '#777777')
+        $('#user_name').html('<i class="material-icons" style="font-size: 15px">add_alert</i>&nbsp;&nbsp;&nbsp;请输入项目名称')
+    })
+    $('[name=brandname]').blur(function () {
+        if (check($(this).val())) {
+            $.ajax({
+                async: true,
+                type: 'get',
+                url: "{% url 'project:checkproject' %}",
+                dataType: 'json',
+                data: {'projectname': $(this).val()},
+                success: function (data) {
+                    if (data.msg == 1) {
+                        $('#user_name').css('color', '#777777')
+                        $('#user_name').html('<i class="material-icons" style="font-size: 15px">done</i>&nbsp;&nbsp;&nbsp;项目名称验证通过')
+                        checkprojectname = true
+                    } else {
+                        $('#user_name').css('color', 'red')
+                        $('#user_name').html('<i class="material-icons" style="font-size: 15px">error_outline</i>&nbsp;&nbsp;项目名称已存在！')
+                        checkprojectname = false
+                    }
+                }
+            })
+        } else {
+            $('#user_name').css('color', 'red')
+            $('#user_name').html('<i class="material-icons" style="font-size: 15px">error_outline</i>&nbsp;&nbsp;项目名称不能为空或包含空格！')
+            checkprojectname = false
+        }
+
+    });
+    //checkfirstindustry
+    $('[name=fname]').change(function () {
+        if (check($(this).val())) {
+            checkfirstindustry = true
+        } else {
+            checkfirstindustry = false
+        }
+    });
+    // checksecondindustry
+    $('[name=sname]').change(function () {
+        if (check($(this).val())) {
+            checksecondindustry = true
+        } else {
+            checksecondindustry = false
+        }
+    });
+
+     //监听下拉框
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('select(firstlevel)', function (data) {
+                if(data.value != 0){
+                    checksecondindustry = true
+                    checkfirstindustry = true
+                }else{
+                    checksecondindustry = false
+                    checkfirstindustry = false
+                }
+                $('#scselector').empty()
+                console.log(data.value); //得到被选中的值
+                var fid = data.value
+                $.ajax({
+                    async: true,
+                    type: 'get',
+                    url: "{% url 'project:getsecondindustry' %}",
+                    dataType: 'json',
+                    data: {fid: fid},
+                    success: function (data) {
+                        $('#scselector').empty()
+                        $('#scselector').append(data.msg);
+                        //重新渲染
+                        form.render()
+                    }
+                })
+            });
+            form.render('select');
+        });
+
+
+    //提交对变量的验证
+    $('#submin_btn').click(function () {
+
+        if (checkfirstindustry && checksecondindustry && checkprojectname) {
+            $('#mainForm').submit()
+        } else if (checkfirstindustry === false) {
+            swal('请输选择一级行业分类！', '行业分类不能为空！', 'error')
+        } else if (checksecondindustry === false) {
+            swal('请输选择二级行业分类！', '行业分类不能为空！', 'error')
+        } else if (checkprojectname === false) {
+            $('#user_name').css('color', 'red')
+            $('#user_name').html('<i class="material-icons" style="font-size: 15px">error_outline</i>&nbsp;&nbsp;&nbsp;请输入合法的项目名称')
+            swal('请输入项目名称！', '项目名称不合法！', 'error')
+        }
+    })
+
+</script>
+
+
+{% endblock  %}

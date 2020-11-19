@@ -1,0 +1,691 @@
+{% extends './index.html' %}
+{% load static %}
+{% block up %}
+{% load hometags %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="alternate" media="handheld" href="">
+    <title>{{ bloginfo.title }} _3Q博客</title>
+    <!--<link href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/atelier-lakeside-dark.min.css" rel="stylesheet"/>-->
+    <!--<script src='../../static/js/blog.js' type='text/javascript'></script>-->
+    <link rel="stylesheet" href="../../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/css/detail-f27ec51f6e.min.css">
+    <link rel="stylesheet" href="../../static/css/skin-yellow-db01cea9f7.min.css">
+    <!--    自定义皮肤样式-->
+    <script src="../../static/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <!--js引用-->
+    <script src="../../static/js/js.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../../static/css/sandalstrap.min.css">
+    <script type="text/javascript" src="/static/layui/layui.all.js"></script>
+    <link  href="/static/layui/css/layui.css"  rel="stylesheet">
+
+    <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview {
+            display: none
+        }
+        a:hover {
+            text-decoration: none;
+        }
+        a {
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+
+<body class="nodata ">
+    <link rel="stylesheet" href="../../static/css/content_toolbar.css">
+    {% endblock %}
+
+    {% block down %}
+    <link rel="stylesheet" href="../../static/css/blog_code-c3a0c33d5c.css">
+    <link rel="stylesheet" href="../../static/css/paging-e040f0c7c8.css">
+
+    <link rel="stylesheet" href="../../static/css/chart-3456820cac.css">
+    <script src="../../static/js/hm.js"></script>
+    <div style="margin-top: 40px">
+    <div class="main_father clearfix d-flex justify-content-center" style="height:100%;">
+        <div class="container clearfix" id="mainBox">
+            <div class='space_container'></div>
+            <main>
+                <div class="blog-content-box">
+                    <div class="article-header-box">
+                        <div class="article-header">
+                            <div class="article-title-box">
+                                <h1 class="title-article">{{ bloginfo.title }}</h1>
+                            </div>
+                            <div class="article-info-box">
+                                <div class="article-bar-top">
+                                    <!--文章类型--> <span class="article-type type-1 float-left">{{ bloginfo.yuanchuang }}</span>
+                                    <a class="follow-nickName" href="javascript:;" target="_blank" rel="noopener">{{ bloginfo.source }}</a>
+                                    <span class="time">最后发布于{{ bloginfo.addtime }}                    </span>
+                                    <span class="read-count">阅读数 {{ bloginfo.look }}</span>
+                                    {% if iscollect == 1 %}
+                                    <a id='blog_detail_zk_collection' class="un-collection bgcollection" >
+                                        <svg class="icon colstar"   style="color: red;">
+                                            <use xlink:href="#icon-csdnc-Collection-G"></use>
+                                        </svg> <span class="bgspan">已收藏</span>
+                                    </a>
+                                    {% else %}
+                                    <a id='blog_detail_zk_collection' class="un-collection bgcollection" >
+                                        <svg class="icon colstar">
+                                            <use xlink:href="#icon-csdnc-Collection-G"></use>
+                                        </svg> <span class="bgspan">收藏</span>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                <div class="up-time">发布于{{ bloginfo.addtime }}</div>
+                                <div class="slide-content-box" >
+                                    <div class="tags-box artic-tag-box"> <span class="label">分类专栏：</span>
+                                        <a class="tag-link"  rel="noopener">
+                                       {{ bloginfo.zlid.title }} </a>
+                                    </div>
+                                        <div class="tags-box artic-tag-box"> <span class="label">文章标签：</span>
+                                            <a class="tag-link"  rel="noopener">{{ bloginfo.label }}</a>
+                                        <div class="article-copyright">
+                                            <span class="creativecommons">
+                                            <div class="article-source-link2222">
+                                                {% if bloginfo.yuanchuang == '原创' %} 本位为作者原创作品，转载请附上本文链接：
+                                                <a href="javascript:;">{{ request.build_absolute_uri }}</a>
+                                                {% elif bloginfo.yuanchuang == '转载' %} 原文链接：
+                                                <a href="javascript:;">{{ bloginfo.beforeurl }}</a>
+                                                {% endif %}
+                                            </div>
+                                            </span>
+                                        </div>
+                                     </div>
+                                </div>
+                                <script>
+                                    $('.slide-content-box').show()
+                                </script>
+                        </div>
+                    </div>
+                    <article class="baidu_pl">
+                        <div id="article_content" class="article_content clearfix">
+                            <link rel="stylesheet" href="../../static/css/ck_htmledit_views-688b67d66a.css">
+                            <div id="content_views" class="markdown_views prism-atelier-sulphurpool-light" >
+                                <!-- 博客内容填充这里 -->
+                                {{ bloginfo.ginfo|safe }}
+                            </div>
+
+                            <link href="../../static/css/markdown_views-60ecaf1f42.css" rel="stylesheet">
+                            <div class="more-toolbox">
+                                <div class="left-toolbox">
+                                    <ul class="toolbox-list">
+                                        <li class="tool-item tool-active is-like {% if bloginfo.is_blog_affirm == 1 %} tool-clicked {% endif %}">
+                                            <a href="javascript:;" id="blog_affirm">
+                                                <svg class="icon" aria-hidden="true">
+                                                    <use xlink:href="#csdnc-thumbsup"></use>
+                                                </svg><span class="name">点赞</span>
+                                                <span class="count sub_count">{{ bloginfo.affirm }}</span>
+                                            </a>
+                                        </li>
+                                        <li class="tool-item tool-active is-collection bgcollection">
+                                            <a >
+                                                <svg class="icon colstar">
+                                                    <use xlink:href="#icon-csdnc-Collection-G"></use>
+                                                </svg><span class="name bgspan">收藏</span>
+                                            </a>
+                                        </li>
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </article>
+                </div>
+                </div>
+
+
+
+                <script>
+                    // 收藏
+                    $('.bgcollection').click(function () {
+                        if ($('.bgspan').eq(0).text() == '已收藏'){
+                            return
+                        }
+                        if( "{{ request.session.userinfo }}" ){
+
+                        }else{
+                            layer.msg('请先登录！');
+                            return
+                        }
+                       var blog_detail = layer.open({
+                           type: 1,
+                           skin: 'layui-layer-lan', //样式类名
+                           btn: ['yes', 'no'],
+                           closeBtn: 1, //不显示关闭按钮
+                           area: ['680px', '47%'],
+                           anim: 2,
+                           shadeClose: true, //开启遮罩关闭
+                           content:
+                                '<div class="layui-form">'+
+                               ' <div class="row clearfix" style="width: 690px">\n' +
+                               ' <div class="col-md-4" style="margin-left: 15px">\n' +
+                               ' <p> <b>请选择所属收藏夹</b>\n' +
+                               ' </p>\n' +
+                               '         <select name="blog_flzl" id="scselector" class="shortselect" lay-filter=\'blog_flzl\'>\n' +
+                               '             <option value="0">--</option>\n' +
+                               '             {% for recode in zlid_obj %}\n' +
+                               '                 <option value="{{ recode.id }}">{{ recode.title }}</option>\n' +
+                               '             {% endfor %}\n' +
+                               '         </select>\n' +
+                               '     </div>\n' +
+                               '     <div style="height: 25px"></div>\n' +
+                               '     <div class="col-md-4">\n' +
+                               '         <div class="input-group" style="width: 100%">\n' +
+                               '             <input type="text" class="form-control " placeholder="收藏夹名称" name="flzl">\n' +
+                               '         </div>\n' +
+                               '     </div>\n' +
+                               '     <div class="col-md-1" style="height: 16px;margin-top: -5px">\n' +
+                               '         <button class="btn layui-btn-warm" id="addzl">\n' +
+                               '             新建收藏夹\n' +
+                               '         </button>\n' +
+                               '     </div>\n' +
+                               ' </div>' +
+                               '</div>'+
+                               ' <script>\n' +
+                               '                    layui.use(\'form\', function () {\n' +
+                               '                        var form = layui.form;\n' +
+                               '                        form.render(\'select\');\n' +
+                               '                    });\n' +
+                               '                                    \n' +
+                               '                    $(\'#addzl\').click(function () {\n' +
+                               '                        var flzl = $(\'[name=flzl]\').val();\n' +
+                               '                        $.ajax({\n' +
+                               '                            async: true,\n' +
+                               '                            dataType:\'json\',\n' +
+                               '                            type:\'post\',\n' +
+                               '                            url:"\addcollection",\n' +
+                               '                            data:{\n' +
+                               '                              csrfmiddlewaretoken:$(\'[name=csrfmiddlewaretoken]\').val(),\n' +
+                               '                              flzl:flzl\n' +
+                               '                            },\n' +
+                               '                            success:function (data) {\n' +
+                               '                                if(data.msg == 1){\n' +
+                               '                                    layer.msg(\'新建收藏夹成功!\');\n' +
+                               '                                    layui.use(\'form\', function () {\n' +
+                               '                                        var form = layui.form;\n' +
+                               '                                        $(\'#scselector\').append(data.zl_html);\n' +
+                               '                                        form.render(\'select\');\n' +
+                               '                                    });\n' +
+                               '                                }else{\n' +
+                               '                                    layer.msg(data.msg)\n' +
+                               '                                }\n' +
+                               '                            }\n' +
+                               '                        })\n' +
+                               '                    });\n' +
+                               '                <\/script>',
+                           btn1:function () {
+                               $.post('collectblog',{csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val(),scselector:$('#scselector').val()},function(data){
+                                   if(data.msg === 1){
+                                       layer.msg('收藏成功');
+                                       $('.bgspan').text('已收藏');
+                                       $('.colstar').css('color','red');
+                                       layer.close(blog_detail)
+                                   }else{
+                                       layer.msg(data.msg);
+                                       return false
+                                   }
+                                   })
+                           }
+                       })
+                    });
+
+                    $('#blog_affirm').click(function () {
+                        var bg_af_num = $('.sub_count').text();
+                        if(checkuser()){
+                            $.get('affirm_blog',{'user_id':"{{ request.session.userinfo.userid }}"},function (data) {
+                                if(data.msg==='add'){
+                                    $('.is-like').addClass('tool-clicked');
+                                    $('.sub_count').text(Number(bg_af_num)+1)
+                                }else if(data.msg ==='lose'){
+                                    $('.is-like').removeClass('tool-clicked');
+                                    $('.sub_count').text(Number(bg_af_num)-1)
+                                }else {
+                                    layer.msg(data.msg)
+                                }
+                            })
+                        }else {
+                            nologin();
+                        }
+                    })
+                </script>
+
+
+
+                <a id="commentBox" name="commentBox"></a>
+                <div class="comment-box">
+                    <div class="comment-edit-box d-flex">
+                        <a id="commentsedit"></a>
+                        <div class="user-img">
+                            <a href="javascript:void(0);" rel="noopener">
+                                {% if request.session.userinfo %}
+                                <img class="show_loginbox" src="{{ request.session.userinfo.userimg }}">
+                                {% else %}
+                                <img class="show_loginbox" src="../../static/picture/anonymous-User-img.png">
+                                {% endif %}
+                            </a>
+                        </div>
+                        <form id="commentform" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" id="comment_replyId">
+                            <textarea class="comment-content" name="comment_content" id="comment_content" placeholder="想对作者说点什么" maxlength="1000"></textarea>
+                            <div class="opt-box" style="float: right">
+                                <!-- d-flex -->
+                                <div id="ubbtools" class="add_code">
+                                    <a href="#insertcode" code="code" target="_self"><i class="icon iconfont icon-daima"></i></a>
+                                </div>
+
+                                <input type="hidden" id="article_id" name="article_id" value="{{ bloginfo.id }}">
+                                <input type="hidden" id="parentid" name="parentid" value="0">
+                                <input type="hidden" id="applyid" name="applyid" value="1">
+
+                                <div style="display: none;" class="csdn-tracking-statistics tracking-click" data-report-click='{"mod":"popu_384","dest":""}'>
+                                    <a href="#" target="_blank" class="comment_area_btn" rel="noopener">发表评论</a>
+                                </div>
+
+                                <div class="right-box"> <span id="tip_comment" class="tip">还能输入<em>1000</em>个字符</span>
+                                    <input type="button" class="btn btn-sm btn-cancel" style="display: none" value="取消回复">
+                                    <a class="col-sm-1">
+                                        <a  type="button" class="btn layui-btn-warm btn-comment" style="float: right" >发表评论</a>
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                        <script>
+                            $('.opt-box').show()
+                        </script>
+                    </div>
+                    <div class="comment-list-container">
+                        <a id="comments"></a>
+                        <div class="comment-list-box">
+                            <ul class="comment-list">
+                                {% for k,v in commentinfo.items %}
+                                <li class="comment-line-box d-flex">
+                                    <a target="_blank" href="/user_{{ k.uid.userid }}">
+                                        <img src="{{ k.uid.head_url }}"  class="avatar">
+                                    </a>
+                                    <div class="right-box ">
+                                        <div class="new-info-box clearfix">
+                                            <a target="_blank" href="/user_{{ k.uid.userid }}">
+                                                <span class="name ">{{ k.uid.username }}</span>
+                                            </a>
+                                            <span class="date" title="2020-01-14 18:04:54">{{ k.addtime }}</span>
+                                            <span class="floor-num"></span>
+                                            <span class="new-comment" style="">{{ k.ginfo }}</span>
+                                            <span class="new-opt-box">
+                                                <a class="btn btn-link-blue btn-reply" data-type="reply" username="{{ k.uid.username }}" reply="{{ k.parentid }}" user = '{{ k.id }}'>回复</a>
+                                                {% if  v|length  != 0 %}
+                                                <a class="btn btn-link-blue btn-read-reply" data-type="readreply">查看回复({{ v | length }})</a>
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                        <div class="comment-like {% if k.is_affirm == 1 %} liked {% endif %} " comment_id="{{ k.id }}" >
+                                            <svg t="1569296798904" class="icon " viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5522" width="200" height="200">
+                                                <path d="M726.016 906.666667h-348.586667a118.016 118.016 0 0 1-116.992-107.904l-29.013333-362.666667A117.589333 117.589333 0 0 1 348.458667 309.333333H384c126.549333 0 160-104.661333 160-160 0-51.413333 39.296-88.704 93.397333-88.704 36.906667 0 71.68 18.389333 92.928 49.194667 26.88 39.04 43.178667 111.658667 12.714667 199.509333h95.530667a117.418667 117.418667 0 0 1 115.797333 136.106667l-49.28 308.522667a180.608 180.608 0 0 1-179.072 152.704zM348.458667 373.333333l-4.48 0.170667a53.461333 53.461333 0 0 0-48.768 57.472l29.013333 362.666667c2.218667 27.52 25.6 49.024 53.205333 49.024h348.544a116.949333 116.949333 0 0 0 115.925334-98.816l49.322666-308.736a53.418667 53.418667 0 0 0-52.650666-61.781334h-144.085334a32 32 0 0 1-28.458666-46.634666c45.909333-89.130667 28.885333-155.434667 11.562666-180.522667a48.981333 48.981333 0 0 0-40.192-21.504c-6.912 0-29.397333 1.792-29.397333 24.704 0 111.317333-76.928 224-224 224h-35.541333zM170.624 906.666667a32.042667 32.042667 0 0 1-31.872-29.44l-42.666667-533.333334a32.042667 32.042667 0 0 1 29.354667-34.474666c17.066667-1.408 33.024 11.733333 34.432 29.354666l42.666667 533.333334a32.042667 32.042667 0 0 1-31.914667 34.56z"
+                                                p-id="5523"></path>
+                                            </svg>
+                                            <span>{{ k.affirm }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                {% if v|length != 0 %}
+                                <li class="replay-box" >
+                                    <ul class="comment-list" >
+                                        {% for j in v %}
+                                        <li class="comment-line-box d-flex" >
+                                            <a target="_blank" href="/user_{{ j.uid.userid }}">
+                                                <img src="{{ j.uid.head_url }}"   class="avatar">
+                                            </a>
+                                            <div class="right-box reply-box">
+                                                <div class="new-info-box clearfix">
+                                                    <a target="_blank" href="/user_{{ j.uid.userid }}">
+                                                        <span class="name mr-8">{{ j.uid.username }}</span>
+                                                    </a>
+                                                    <span class="text">回复</span>
+                                                    <span class="nick-name">{{ j.applyid.uid.username }}</span>
+                                                    <span class="date" title="2020-04-06 18:11:12">{{ j.addtime }}</span>
+                                                    <span class="text"></span><span class="new-comment" style="">{{ j.ginfo }}</span>
+                                                    <span class="new-opt-box">
+                                                        <a class="btn btn-link-blue btn-reply" data-type="reply" username="{{ j.uid.username }}" reply="{{ j.parentid }}" user = '{{ j.id }}'>回复</a>
+                                                    </span>
+                                                </div>
+                                                <div class="comment-like {% if j.is_affirm == 1 %} liked {% endif %} " comment_id="{{ j.id }}">
+                                                    <svg t="1569296798904" class="icon " viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5522" width="200" height="200">
+                                                        <path d="M726.016 906.666667h-348.586667a118.016 118.016 0 0 1-116.992-107.904l-29.013333-362.666667A117.589333 117.589333 0 0 1 348.458667 309.333333H384c126.549333 0 160-104.661333 160-160 0-51.413333 39.296-88.704 93.397333-88.704 36.906667 0 71.68 18.389333 92.928 49.194667 26.88 39.04 43.178667 111.658667 12.714667 199.509333h95.530667a117.418667 117.418667 0 0 1 115.797333 136.106667l-49.28 308.522667a180.608 180.608 0 0 1-179.072 152.704zM348.458667 373.333333l-4.48 0.170667a53.461333 53.461333 0 0 0-48.768 57.472l29.013333 362.666667c2.218667 27.52 25.6 49.024 53.205333 49.024h348.544a116.949333 116.949333 0 0 0 115.925334-98.816l49.322666-308.736a53.418667 53.418667 0 0 0-52.650666-61.781334h-144.085334a32 32 0 0 1-28.458666-46.634666c45.909333-89.130667 28.885333-155.434667 11.562666-180.522667a48.981333 48.981333 0 0 0-40.192-21.504c-6.912 0-29.397333 1.792-29.397333 24.704 0 111.317333-76.928 224-224 224h-35.541333zM170.624 906.666667a32.042667 32.042667 0 0 1-31.872-29.44l-42.666667-533.333334a32.042667 32.042667 0 0 1 29.354667-34.474666c17.066667-1.408 33.024 11.733333 34.432 29.354666l42.666667 533.333334a32.042667 32.042667 0 0 1-31.914667 34.56z"
+                                                        p-id="5523"></path>
+                                                    </svg><span>{{ j.affirm }}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div id="commentPage" class="pagination-box ">
+                            <div class="ui-paging-container">
+                                <ul>
+                                    {% PageShow totalpages request %}
+                                </ul>
+                            </div>
+                        </div>
+                        <a   href="#comment_maodian"></a>
+                        <div class="opt-box text-center">
+                            <div class="btn btn-sm btn-link-blue" id="btnMoreComment"></div>
+                        </div>
+                    </div>
+                </div>
+                    <script>
+                        //初始化显示回复
+                        $('.comment-list-container').show();
+
+                        // 评论分页点击
+                        $('.ui-paging-container ul li').click(function () {
+                            if (  $(this).attr('href') == undefined ){
+
+                            }else{
+                                location.href = $(this).attr('href')
+                            }
+                        });
+
+                        //查看收起回复点击
+                        $('.btn-read-reply').click(function () {
+                              console.log($(this).text().slice(4));
+                              var co_num = $(this).text().slice(4);
+                            if( $(this).text().charAt(0) === '查' ){
+                                $(this).parents('li').next().show();
+                                $(this).text('收起回复'+co_num)
+                            }else{
+                                $(this).parents('li').next().hide();
+                                $(this).text('查看回复'+co_num)
+                            }
+                        });
+                        //验证登录
+                        var checkuser = function () {
+                            if ( '{{ request.session.userinfo }}' ){
+                                return true
+                            }else{
+                                return false
+                            }
+                        };
+                        //弹窗提示登陆
+                        var nologin = function() {
+                            layer.msg('请先登录！',{'anim':6})
+                        };
+                        //回复点击
+                        $('.btn-reply').click(function () {
+                           if(checkuser()){
+                                var reply = $(this).attr('reply');
+                                var user = $(this).attr('user');
+                                var username = $(this).attr('username');
+                                if(reply === '0'){
+                                    $('#parentid').val(user);
+                                    $('#applyid').val(user);
+                                    $('.btn-cancel').show();
+                                    $('#comment_content').attr('placeholder','回复:'+username);
+                                }else {
+                                    $('#parentid').val(reply);
+                                    $('#applyid').val(user);
+                                    $('.btn-cancel').show();
+                                    $('#comment_content').attr('placeholder','回复:'+username);
+                                }
+                           }else{
+                               nologin()
+                           }
+                        });
+                        //取消回复按钮
+                        $('.btn-cancel').click(function () {
+                           //初始化回复表单
+                             $('.btn-cancel').hide();
+                             $('#parentid').val(0);
+                             $('#applyid').val(1);
+                             $('.comment-content').attr('placeholder','想对作者说点什么')
+                        });
+                        //输入统计
+                        $('#comment_content').keyup(function () {
+                           var all_num = $(this).val().length;
+                           var remain_num = 1000-all_num;
+                           if(remain_num < 1 ){
+                               layer.msg('不能输入更多了',{'anim':6})
+                           }
+                           $('#tip_comment em').text(remain_num)
+                        });
+                        //发表评论
+                        $('.btn-comment').click(function () {
+                            if(checkuser()){
+                                console.log(1111);
+                                $('#commentform').submit()
+                            }else{
+                                nologin()
+                            }
+                        });
+                        //评论点赞
+                        $('.comment-like').click(function () {
+                            flag = $(this);
+                            var comment_id = $(this).attr('comment_id');
+                            if(checkuser()){
+                                $.ajax({
+                                    async: true,
+                                    dataType:'json',
+                                    type:'get',
+                                    url:"/user_{{ bloginfo.uid.userid }}/blog_{{ bloginfo.id }}/comment_affirm",
+                                    data:{
+                                        comment_id:comment_id,
+                                    },
+                                    success:function (data) {
+                                        if(data.msg==='add'){
+                                            var nows = flag.children('span').text();
+                                            console.log(nows);
+                                            flag.addClass('liked');
+                                            flag.children('span').text(Number(nows)+1)
+                                        }else if(data.msg==='lose'){
+                                            var nows = flag.children('span').text();
+                                            flag.removeClass('liked');
+                                            flag.children('span').text(Number(nows)-1)
+                                        }else{
+                                            layer.msg(data.msg,{'anim':6})
+                                        }
+                                    }
+                                })
+                            }else{
+                                nologin()
+                            }
+                        })
+                    </script>
+
+
+                <div class="recommend-box">
+                    {% for i in blog_tuijian %}
+                    <div class="recommend-item-box type_blog clearfix" >
+                        <div class="content">
+                            <a href="/user_{{ i.uid.userid }}/blog_{{ i.id }}" target="_blank" rel="noopener" >
+                                <h4 class="text-truncate oneline">
+                                   {{ i.title }}    </h4>
+                                <div class="info-box d-flex align-content-center">
+                                    <p class="date-and-readNum oneline">    <span class="date hover-show">{{ i.addtime }}</span>
+                                        <span class="read-num hover-hide">阅读数 {{ i.look }}</span>
+                                    </p>
+                                </div>
+                            </a>
+                            <p class="content">
+                                <a href="/user_{{ i.uid.userid }}" target="_blank" rel="noopener" > <span class="desc oneline">{{ i.ginfo }}</span>
+                                </a>    <span class="blog_title_box oneline ">
+                                    <span class="type-show type-show-blog type-show-after">博文</span>
+                                <a target="_blank" rel="noopener" href="/user_{{ i.uid.userid }}">来自 <span class="blog_title"> {{ i.uid.username }}的博客</span></a>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                     {% endfor %}
+
+                   
+                    <div class="recommend-loading-box">
+                        <img src='../../static/picture/feedLoading.gif'>
+                    </div>
+                    <div class="recommend-end-box">
+                        <p class="text-center">没有更多推荐了，<a href="javascript:;" class="c-blue c-blue-hover c-blue-focus">返回首页</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="template-box"> <span>©️2020 3Q</span><span class="point"></span>
+                    <span>本网站仅作为个人教学练习使用，无任何商业或是盈利目的 所有素材均来自https://www.csdn.net/</span>
+                </div>
+            </main>
+
+
+            <aside class="blog_container_aside">
+                <!--主页引入-->
+                <div id="asideProfile" class="aside-box">
+                    <!-- <h3 class="aside-title">个人资料</h3> -->
+                    <div class="profile-intro d-flex">
+                        <!-- 头像 -->
+                        <div class="avatar-box d-flex justify-content-center flex-column">
+                            <a href="javascript:;">
+                                <img src="{{ bloginfo.uid.head_url }}" class="avatar_pic">
+                            </a>
+               
+                        </div>
+
+                        <div class="user-info d-flex flex-column profile-intro-name-box">
+                            <div> 
+                                <span class="name csdn-tracking-statistics tracking-click " >
+                                <a href="javascript:;" class="" id="uid" title='{{ bloginfo.uid.username }}'>{{ bloginfo.uid.username }}</a>
+                                </span>
+                            </div>
+                            <div class="profile-intro-name-boxFooter"> 
+                                 <span class="personal-home-page" style='right:-96px;'><a target="_blank" href="/user_{{ bloginfo.uid.userid }}">TA的个人主页</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="asideCategory" class="aside-box flexible-box" style="display:block!important;">
+                    <h3 class="aside-title">分类专栏</h3>
+                    <div class="aside-content">
+                        <ul>
+                            {% for i in flzl %}
+                            <li class="">
+                                <a class="clearfix" href="/user_{{ bloginfo.uid.userid }}" >
+                                    <span class="title oneline"><span class="text">{{ i.title }}</span>
+                                    </span>
+                                    <span class="count float-right">{{ i.blog_num }}篇</span>
+                                </a>
+                            </li>
+                            {% endfor %}
+                            
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="asideHotArticle" class="aside-box">
+                    <h3 class="aside-title">热门文章</h3>
+                    <div class="aside-content" >
+                        <ul class="hotArticle-list">
+                            {% for i in remen_blog %}
+                            <li> <a  href="/user_{{ i.uid.userid }}/blog_{{ i.id }}">
+                                                {{ i.title }}                    </a>
+                                <p class="read">阅读数 <span>{{ i.look }}</span>
+                                </p>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                
+
+
+            </aside>
+            <script src="../../static/js/publib_footer-1.0.3.js" data-isfootertrack="false" type="text/javascript"></script>
+            <script>
+                $("a.flexible-btn").click(function() {
+                    $(this).parents('div.aside-box').removeClass('flexible-box');
+                    $(this).parents("p.text-center").remove();
+                })
+            </script>
+            <script src="../../static/js/user-tooltip.js" type="text/javascript"></script>
+        </div>
+
+
+        <div class="recommend-right  align-items-stretch clearfix" data-type="recommend">
+            <aside class="recommend-right_aside">
+                <div id="recommend-right" style="height:100%;">
+                    <div class="recommend-top-adbox d-flex flex-column aside-box"></div>
+                    <div class="recommend-list-box d-flex flex-column aside-box">
+                        <ul class="recommend-fixed-box align-items-stretch">
+                            {% for i in blog_tuijian %}
+                            <li class="right-item">
+                                <a href="/user_{{ i.uid.userid }}/blog_{{ i.id }}" target="_blank" >
+                                    <div class="context-box ">
+                                        <div class="content clearfix ">
+                                            <h5>
+                                                {{ i.title }}</h5>
+                                            <span class="time">{{ i.addtime }}</span>
+                                            <span class="read"> 阅读数 {{ i.look }} </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            {% endfor %}
+                           
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <div class="mask-dark"></div>
+   
+   </div>
+
+    <script type="text/javascript" crossorigin="" src="../../static/js/icon-1349369f06.js"></script>
+
+
+
+</body>
+<script type="text/javascript" src="../../static/js/pc_wap_common-f91259fb12.js"></script>
+<link rel="stylesheet" href="../../static/css/atelier-sulphurpool-light.css">
+<script src="../../static/js/csdnc-c439e66521.js"></script>
+<script src="../../static/js/common-1678ae4db8.min.js"></script>
+<script src="../../static/js/detail-78398b81e2.min.js"></script>
+<script src="../../static/js/skin-yellow-e2b6be7b58.min.js"></script>
+<script src="../../static/js/copyright.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../static/js/js2.js"></script>
+<script>
+    $(".MathJax").remove();
+    if ($('div.markdown_views pre.prettyprint code.hljs').length > 0) {
+        $('div.markdown_views')[0].className = 'markdown_views';
+    }
+    // $('code').addClass('prism ');
+    // $('code').addClass('language-java ');
+    // $('code').attr('style',"position: unset;");
+    // $('code').attr('onclick',"mdcp.copyCode(event)");
+
+    // $('code').attr('style','white-space: normal;word-break: break-all;')
+    // var text = $('code').text();
+    // console.log(text);
+    // var text1 = text.replace('\n','</br>');
+    // $('code').html(text1)
+</script>
+<script type="text/javascript" src="../../static/js/MathJax-TeX-AMS-MML_HTMLorMML.js"></script>
+<!--<script src="../../static/js/baidu-search.js" type="text/javascript"></script>-->
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">{{ jscode|default:"" |safe }}</script>
+</html>
+{% endblock %}

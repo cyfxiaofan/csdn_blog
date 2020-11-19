@@ -1,0 +1,390 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+后台首页
+{% endblock %}
+
+{% block link %}
+<!-- Google Fonts -->
+    <link href="{% static 'material-icons-0.3.1/iconfont/material-icons.css' %}" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="{% static 'plugins/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="/static/plugins/node-waves/waves.css" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="/static/plugins/animate-css/animate.css" rel="stylesheet" />
+
+    <!-- Morris Chart Css-->
+    <link href="/static/plugins/morrisjs/morris.css" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="/static/css/themes/all-themes.css" rel="stylesheet" />
+
+
+
+{% endblock %}
+
+{% block main_body %}
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>3Q博客数据可视化控制台</h2>
+        </div>
+        <div class="row clearfix">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-pink hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">playlist_add_check</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">博客总数</div>
+                            <div class="number count-to" data-from="0" data-to="{{ blog_all_num }}" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-cyan hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">favorite</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">收藏总数</div>
+                            <div class="number count-to" data-from="0" data-to="{{ collect_num }}" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-light-green hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">forum</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">评论总数</div>
+                            <div class="number count-to" data-from="0" data-to="{{ comment_num }}" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-orange hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">person_add</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">用户总数</div>
+                            <div class="number count-to" data-from="0" data-to="{{ user_num }}" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Widgets -->
+            <!-- CPU Usage -->
+            <div class="row clearfix">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="header">
+                            <div class="row clearfix">
+                                <div class="col-xs-12 col-sm-6">
+                                    <h2>今日发布博客数 (篇/时)</h2>
+                                </div>
+                                <!--<div class="col-xs-12 col-sm-6 align-right">-->
+                                    <!--<div class="switch panel-switch-btn">-->
+                                        <!--<span class="m-r-10 font-12">停止滚动</span>-->
+                                        <!--<label>关<input type="checkbox" id="realtime" checked><span class="lever switch-col-cyan"></span>开</label>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            </div>
+                        </div>
+                        <div class="body">
+                            <div id="real_time_chart" class="dashboard-flot-chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# CPU Usage -->
+            <div class="row clearfix">
+                <!-- Visitors -->
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="card">
+                        <div class="body bg-pink">
+                            <div class="sparkline"
+                                 data-type="line"
+                                 data-spot-Radius="4"
+                                 data-highlight-Spot-Color="rgb(233, 30, 99)"
+                                 data-highlight-Line-Color="#fff"
+                                 data-min-Spot-Color="rgb(255,255,255)"
+                                 data-max-Spot-Color="rgb(255,255,255)"
+                                 data-spot-Color="rgb(255,255,255)"
+                                 data-offset="90"
+                                 data-width="100%"
+                                 data-height="92px"
+                                 data-line-Width="2"
+                                 data-line-Color="rgba(255,255,255,0.7)"
+                                 data-fill-Color="rgba(0, 188, 212, 0)" >
+                                {{ blog_month_list }}
+                            </div>
+                            <ul class="dashboard-stat-list">
+                                <li>
+                                    今日发布博客数
+                                    <span class="pull-right"><b>{{ today_num }}</b> <small>条</small></span>
+                                </li>
+                                <li>
+                                    昨日发布博客数
+                                    <span class="pull-right"><b>{{ yestoday_num }}</b> <small>条</small></span>
+                                </li>
+                                <li>
+                                    近7天发布博客数
+                                    <span class="pull-right"><b>{{ last_week_num }}</b> <small>条</small></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- #END# Visitors -->
+                <!-- Latest Social Trends -->
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="card">
+                        <div class="body bg-cyan">
+                            <div class="m-b--35 font-bold">最新发布的博客</div>
+                            <ul class="dashboard-stat-list">
+                                {% for i in new_blog %}
+                                <li>
+                                    {{ i.title }}
+                                    <span class="pull-right" style="font-size: 15px">
+                                       <small>{{ i.uid.username }}</small>
+                                    </span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- #END# Latest Social Trends -->
+                <!-- Answered Tickets -->
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="card">
+                        <div class="body bg-teal">
+                            <div class="font-bold m-b--35">最新发布的评论</div>
+                            <ul class="dashboard-stat-list">
+                                {% for i in new_comment %}
+                                <li>
+                                    {{ i.ginfo }}
+                                    <span class="pull-right" style="font-size: 15px">
+                                       <small>{{ i.uid.username }}</small>
+                                    </span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- #END# Answered Tickets -->
+            </div>
+
+            <div class="row clearfix">
+                <!-- Task Info -->
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                    <div class="card">
+                        <div class="header">
+                            <h2>热门博客分类</h2>
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table class="table table-hover dashboard-task-infos">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>分类名</th>
+                                            <th>分类路由</th>
+                                            <th>分类博文总数</th>
+                                            <th>总数可视化</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for k,v in bgcate_info.items %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ k.title }}</td>
+                                            <td><span class="label bg-{{ k.color }}">{{ k.path }}</span></td>
+                                            <td>{{ k.count }}</td>
+                                            <td>
+                                                <div class="progress">
+                                                    <div class="progress-bar bg-{{ k.color }}" role="progressbar" aria-valuenow="{{ v }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ v }}%"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- #END# Task Info -->
+                <!-- Browser Usage -->
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="card">
+                        <div class="header">
+                            <h2>博客分类百分比统计</h2>
+                        </div>
+                        <div class="body">
+                            <div id="donut_chart" class="dashboard-donut-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- #END# Browser Usage -->
+            </div>
+
+
+    </div>
+{% endblock %}
+
+{% block endlinks %}
+ <!-- Jquery Core Js -->
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="/static/plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="/static/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="/static/plugins/node-waves/waves.js"></script>
+
+    <!-- Jquery CountTo Plugin Js -->
+    <script src="{% static 'plugins/jquery-countto/jquery.countTo.js' %} "></script>
+
+    <!-- Morris Plugin Js -->
+    <script src="/static/plugins/raphael/raphael.min.js"></script>
+    <script src="/static/plugins/morrisjs/morris.js"></script>
+
+    <!-- ChartJs -->
+    <script src="/static/plugins/chartjs/Chart.bundle.js"></script>
+
+    <!-- Flot Charts Plugin Js -->
+    <script src="{% static 'plugins/flot-charts/jquery.flot.js' %}"></script>
+    <script src="{% static 'plugins/flot-charts/jquery.flot.resize.js' %}"></script>
+    <script src="{% static 'plugins/flot-charts/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'plugins/flot-charts/jquery.flot.categories.js' %}"></script>
+    <script src="{% static 'plugins/flot-charts/jquery.flot.time.js' %}"></script>
+
+    <!-- Sparkline Chart Plugin Js -->
+    <script src="/static/plugins/jquery-sparkline/jquery.sparkline.js"></script>
+
+    <!-- Custom Js -->
+    <script src="/static/js/admin.js"></script>
+    <script src="/static/js/pages/index.js"></script>
+
+    <!-- Demo Js -->
+    <script src="/static/js/demo.js"></script>
+
+<script>
+
+    $(function () {
+    //Widgets count
+    $('.count-to').countTo();
+
+    //Sales count to
+    $('.sales-count-to').countTo({
+        formatter: function (value, options) {
+            return '$' + value.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, ' ').replace('.', ',');
+        }
+    });
+
+    initRealTimeChart();
+    initDonutChart();
+    initSparkline();
+});
+
+var realtime = 'on';
+function initRealTimeChart() {
+    //Real time ==========================================================================================
+    var plot = $.plot('#real_time_chart', [getRandomData()], {
+        series: {
+            shadowSize: 0,
+            color: 'rgb(0, 188, 212)'
+        },
+        grid: {
+            borderColor: '#f3f3f3',
+            borderWidth: 1,
+            tickColor: '#f3f3f3'
+        },
+        lines: {
+            fill: true
+        },
+        yaxis: {
+            min: 0,
+            max: 10
+        },
+        xaxis: {
+            min: 0,
+            max: 24
+        }
+    });
+
+    function updateRealTime() {
+        plot.setData([getRandomData()]);
+        plot.draw();
+
+        var timeout;
+        if (realtime === 'on') {
+            timeout = setTimeout(updateRealTime, 320);
+        } else {
+            clearTimeout(timeout);
+        }
+    }
+
+    updateRealTime();
+
+    $('#realtime').on('change', function () {
+        realtime = this.checked ? 'on' : 'off';
+        updateRealTime();
+    });
+    //====================================================================================================
+}
+
+function initSparkline() {
+    $(".sparkline").each(function () {
+        var $this = $(this);
+        $this.sparkline('html', $this.data());
+    });
+}
+
+function initDonutChart() {
+    Morris.Donut({
+        element: 'donut_chart',
+        data:{{ bgcate_num_list|safe }},
+        colors: ['rgb(233, 30, 99)', 'rgb(0, 188, 212)', 'rgb(255, 152, 0)', 'rgb(0, 150, 136)', 'rgb(96, 125, 139)'],
+        formatter: function (y) {
+            return y + '%'
+        }
+    });
+}
+
+var data = [];
+function getRandomData() {
+    if (data.length > 0) data = data.slice(1);
+
+    // 没分钟博客发布数 接口类型： [1,2,······]
+    data={{ blog_hour_list }}
+
+    var res = [];
+    for (var i = 0; i < data.length; ++i) {
+        res.push([i, data[i]]);
+    }
+
+    return res;
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,482 @@
+{% extends '../base.html' %}
+{% load static %}
+{% load adminpagetag %}
+{% block title %}用户列表{% endblock %}
+{% block link %}
+ <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+
+  <!-- Bootstrap Core Css -->
+  <link href="{% static 'plugins/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+  <!-- Waves Effect Css -->
+  <link href="{% static 'plugins/node-waves/waves.css' %}" rel="stylesheet" />
+
+  <!-- Animation Css -->
+  <link href="{% static 'plugins/animate-css/animate.css' %}" rel="stylesheet" />
+
+  <!-- JQuery DataTable Css -->
+  <link href="{% static 'plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css' %}" rel="stylesheet" />
+
+  <!-- Custom Css -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+
+  <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+  <link href="{% static 'css/themes/all-themes.css' %}" rel="stylesheet" />
+<!-- Colorpicker Css -->
+    <link href="{% static 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css' %}" rel="stylesheet" />
+
+    <!-- Dropzone Css -->
+    <link href="{% static 'plugins/dropzone/dropzone.css' %}" rel="stylesheet">
+
+    <!-- Multi Select Css -->
+    <link href="{% static 'plugins/multi-select/css/multi-select.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Spinner Css -->
+    <link href="{% static 'plugins/jquery-spinner/css/bootstrap-spinner.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Tagsinput Css -->
+    <link href="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Select Css -->
+    <link href="{% static 'plugins/bootstrap-select/css/bootstrap-select.css' %}" rel="stylesheet" />
+
+    <!-- noUISlider Css -->
+    <link href="{% static 'plugins/nouislider/nouislider.min.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="{% static 'webuploader/webuploader.css' %}" />
+{% endblock %}
+
+
+
+{% block main_body %}
+<div class="container-fluid">
+{% csrf_token %}
+  <ol class="breadcrumb breadcrumb-bg-orange">
+  <li><a href="{% url 'index:index_show' %}">首页</a></li>
+  <li class="active">用户列表</li>
+  </ol>
+  <!-- Basic Examples -->
+  <!-- Exportable Table -->
+  <!-- Basic Table -->
+  <div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="card">
+        <div class="header">
+          <h2>
+            <strong><i class="material-icons" style="font-size: 25px">account_circle</i>&nbsp;&nbsp; 用户管理</strong>
+            <small>支持用户名, 手机号, 邮箱查询;注意仅支持单个关键词</small>
+          </h2>
+        </div>
+
+        <form action="" method="GET">
+          <div class="row clearfix">
+
+          <div class="col-md-1" style="float: right;">
+              <button type="submit" class=" btn bg-red btn-circle "  >
+                  <i class="material-icons">search</i>
+              </button>
+          </div>
+
+            <div class="col-md-3" style="float:right;">
+              <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="material-icons" style="font-size: 25px">account_circle</i>
+                </span>
+
+                <div class="form-line">
+                  <input type="text" class="form-control date" placeholder="搜索关键词" name="keywords" value="{{ keywords| default:'' }}">
+                </div>
+
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+        </form>
+
+      <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+      <!--<div class="card">-->
+          <!--<div class="body table-responsive">-->
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <table class="table ">
+                  <thead>
+                      <tr>
+                          <th>序号</th>
+                          <th>头像</th>
+                          <th>用户ID</th>
+                          <th>昵称</th>
+                          <th>手机号</th>
+                          <th>积分</th>
+                          <th>VIP到期时间</th>
+                          <th>添加时间</th>
+                          <th>启用状态</th>
+                          <th>操作</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+
+                      {% for recode in userinfo %}
+                          <tr>
+                              <th scope="row" class="lid">{{ recode.id }}</th>
+                              <td ><img class="lhead" src="{{ recode.head_url }}" alt="" width="35" height="35"></td>
+                              <td class="luserid">{{ recode.userid }}</td>
+                              <td class="lusername">{{ recode.username }}</td>
+                              <td class="lphone">{{ recode.phone }}</td>
+                              <td class="lvip">{{ recode.yl_2 }}</td>
+                              <td class="lviptime">{{ recode.viptime }}</td>
+                              <td>{{ recode.addtime }}</td>
+                              <td>
+                                  {% if recode.status == 1 %}
+                                      <div class="switch cgsta" id="{{ recode.id }}">
+                                          <label>正常<input class="ltype" type="checkbox" onclick="delfunc(this)" checked><span class="lever"></span>禁用</label>
+                                      </div>
+                                  {% else %}
+                                      <div class="switch cgsta" id="{{ recode.id }}">
+                                          <label>正常<input class="ltype" type="checkbox" onclick="delfunc(this)"><span class="lever"></span>禁用</label>
+                                      </div>
+                                  {% endif %}
+                              </td>
+                            <td><a href="" type="btn" class="btn btn-info btn-xs editbtn" data-toggle="modal" data-target=".bs-example-modal-lg" >编辑</a></td>
+                          </tr>
+                      {% endfor %}
+
+                  </tbody>
+              </table>
+          </div>
+
+          <nav>
+              <center>
+                  <ul class="pagination">
+                        {% PageShow totalpages request %}
+                  </ul>
+              </center>
+          </nav>
+
+      </div>
+    </div>
+</div>
+</div>
+
+
+<!--模态-->
+<!-- Modal -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="myModal" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="background-color: rgba(0,0,0,0.3)">
+      <!--填充-->
+
+           <div class="container-fluid">
+               <div style="height: 15px;"></div>
+
+               <ol class="breadcrumb breadcrumb-bg-orange">
+				<center style="color: white">用户编辑</center>
+                  </ol>
+
+      <!-- 文章基础信息编辑 -->
+      <div class="row clearfix">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="card">
+                  <div class="body">
+
+                      <br>
+
+                      {% csrf_token %}
+                            <!-- 文章基础信息编辑 -->
+      <div class="row clearfix">
+          <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+              <!--<div class="card">-->
+                  <div class="body">
+                      <br>
+                      <form id="mainFrom" action="" method="post">
+                      {% csrf_token %}
+                        <!--用户名-->
+                      <div class="row clearfix">
+
+                          <!--id-->
+                          <input type="text" style="display: none" id="uid">
+                          <div class="col-md-6">
+                            <p>
+                              <b>用户名称</b>
+                            </p>
+                              <div class="input-group">
+                                  <span class="input-group-addon">
+                                      <i class="material-icons">perm_identity</i>
+                                  </span>
+                                  <div class="col-md-8">
+                                      <div class="form-line">
+                                          <input type="text" class="form-control date" id="uname" placeholder="请输入用户名称" name="username" >
+                                     </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                      <span id="links_name" style="color: #777777"></span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                          <!--手机号-->
+                      <div class="row clearfix">
+
+                          <div class="col-md-6">
+                            <p>
+                            <b>用户手机号</b>
+                          </p>
+                              <div class="input-group">
+                                  <span class="input-group-addon">
+                                      <i class="material-icons">phone</i>
+                                  </span>
+                                  <div class="col-md-8">
+                                  <div class="form-line">
+                                      <input type="text" class="form-control date" placeholder="请输入手机号" id="uphone" name="phone">
+                                  </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                      <span id="links_path" style="color: #777777"></span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+
+
+                    <!--用户头像-->
+                    <div class="row clearfix">
+                      <div class="col-md-6">
+                        <p>
+                        <b><i class="material-icons">person_pin</i>请选择头像</b>
+                      </p>
+                          <div class="input-group">
+
+                              <div class="col-md-8">
+
+                              <div class="form-line">
+                                  <img id="portrait"  src="http://www.sucaijishi.com/uploadfile/2014/0524/20140524012042216.png" alt="" width="100" height="100">
+                                  <input id="head_url" type="text"  hidden name="head_url" value="">
+                                  <br><br>
+                                   <div  class="input-group">
+
+
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary">
+                                             <i class="layui-icon">&#xe67c;</i>上传图片
+                                            <div id="filePicker" name="head_img"   >
+
+                                            </div>
+                                        </span>
+                                    </label>
+
+                                       <script>
+                                           window.onload=function () {
+                                               $('[name="file"]').attr('onchange','showPreview(this)')
+                                               $('.webuploader-pick').removeClass('webuploader-pick')
+                                           }
+                                       </script>
+
+
+
+                                 </div>
+                              </div>
+
+                          </div>
+                      </div>
+                      </div>
+                 </div>
+                          <!--图片处理JS-->
+                           <script type="text/javascript">
+                                function showPreview(source) {
+                                  var file = source.files[0];
+                                  if(window.FileReader) {
+                                      var fr = new FileReader();
+                                      console.log(fr);
+                                      var portrait = document.getElementById('portrait');
+                                      fr.onloadend = function(e) {
+                                        portrait.src = e.target.result;
+                                      };
+                                      fr.readAsDataURL(file);
+                                      portrait.style.display = 'block';
+                                  }
+                                }
+                            </script>
+
+
+
+                      <div class="row clearfix">
+                          <div class="col-md-12">
+                              <a type="button" id="cont" class="btn bg-red btn-block waves-effect"><i class="material-icons">send</i>&nbsp;提交</a>
+                          </div>
+                      </div>
+
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+        <!--end填充-->
+  </div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block endlinks %}
+<!--上传图片-->
+ <!-- Jquery Core Js -->
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+    <script async="" src="https://www.google-analytics.com/analytics.js"></script>
+    <script src="{% static 'plugins/bootstrap-notify/bootstrap-notify.js' %}"></script>
+    <script src="{% static 'js/pages/ui/dialogs.js' %}"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.js' %}"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="{% static 'plugins/bootstrap-select/js/bootstrap-select.js' %}"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="{% static 'plugins/node-waves/waves.js' %}"></script>
+
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="{% static 'plugins/jquery-datatable/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/buttons.flash.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/jszip.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/pdfmake.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/vfs_fonts.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/buttons.print.min.js' %}"></script>
+
+    <!-- Custom Js -->
+    <script src="{% static 'js/admin.js' %}"></script>
+    <script src="{% static 'js/pages/tables/jquery-datatable.js' %}"></script>
+{#    <script src="{% static 'js/pages/forms/editors.js' %}"></script>#}
+    <!-- delJS -->
+    <script src="{% static 'js/delfunc.js' %}"></script>
+    <!-- Demo Js -->
+    <script src="{% static 'js/demo.js' %}"></script>
+      <script type="text/javascript" src="{% static 'webuploader/webuploader.js' %}"></script>
+
+<script>
+     //上传图片按钮
+	var uploader = WebUploader.create({
+	// 选完文件后，是否自动上传。
+	    auto: true,
+
+	    // swf文件路径
+	    swf: "{% static 'webuploader/Uploader.swf' %}",
+
+	    // 文件接收服务端。
+	    server: "/user/updatauser/",
+
+	    // 选择文件的按钮。可选。
+	    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+	    pick: '#filePicker',
+
+	    // 只允许选择图片文件。
+	    accept: {
+	        title: 'Images',
+	        extensions: 'gif,jpg,jpeg,bmp,png',
+	        mimeTypes: 'image/*'
+	    }
+	});
+
+	//上传进度
+	uploader.on( 'uploadProgress', function( file, percentage ) {
+    console.log(percentage * 100 + '%');
+
+    });
+    //上传成功之后请求网络地址填入alt
+	uploader.on( 'uploadSuccess', function( file, response ) {
+    $('#portrait').attr('alt',response.file_name);
+    $('[name="head_url"]').attr('value',response.file_name)
+});
+
+
+
+
+
+
+    //信息读取
+    $('.editbtn').bind('click',function () {
+        console.log(1);
+        //取值
+        var lid = $(this).parents('tr').find('.lid').text();
+        var lhead =  $(this).parents('tr').find('.lhead').attr('src');
+        var lname =  $(this).parents('tr').find('.lusername').text();
+        var lphone =  $(this).parents('tr').find('.lphone').text();
+
+        //填值
+        $('#uid').val(lid);
+        $('#uphone').val(lphone);
+        $('#uname').val(lname);
+        if(lhead ==''){
+            $('#head_url').attr('value','');
+            $('#portrait').attr('src','http://www.sucaijishi.com/uploadfile/2014/0524/20140524012042216.png')
+        }else{
+            $('#portrait').attr('src',lhead);
+            $('#head_url').attr('value',lhead);
+        }
+
+        flag=$(this)
+    });
+
+
+
+    $('#cont').click(function () {
+        var uid = $('#uid').val();
+        var uname = $('#uname').val();
+        var uphone = $('#uphone').val();
+        var uhead_url = $('#head_url').attr('value');
+        var csrf_token = $("[name='csrfmiddlewaretoken']").val();
+        comments = {
+            csrfmiddlewaretoken:csrf_token,
+            uid:uid,
+            uname:uname,
+            uphone:uphone,
+            uhead_url:uhead_url,
+        };
+        $.ajax({
+            async: true,
+            type: 'post',
+            url:"{% url 'user:edituser' %}",
+            data_type:'json',
+            data:comments,
+            success:function (data) {
+                if(data.msg==1){
+                      flag.parents('tr').find('.lhead').attr('src',uhead_url);
+                      flag.parents('tr').find('.lusername').text(uname);
+                      flag.parents('tr').find('.lphone').text(uphone);
+                     function showSuccessMessages(){
+                            swal("修改成功!", "修改信息已生效", "success");
+                     }
+                        showSuccessMessages()
+                }else{
+                    function showErrorMessages(){
+                          swal("修改失败!",data.msg, "error");
+                     }
+                     showErrorMessages()
+                }
+            },
+                error:function () {
+
+                    swal("权限不足!", '您没有编辑权限！', "error");
+
+                }
+        });
+        $('#myModal').modal('hide')
+    })
+
+</script>
+{% endblock %}

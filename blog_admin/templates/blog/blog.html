@@ -1,0 +1,595 @@
+{% extends '../base.html' %}
+{% load static %}
+{% load adminpagetag %}
+{% block title %}博客列表{% endblock %}
+{% block link %}
+ <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+  <!-- Bootstrap Core Css -->
+  <link href="{% static 'plugins/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+  <!-- Waves Effect Css -->
+  <link href="{% static 'plugins/node-waves/waves.css' %}" rel="stylesheet" />
+
+  <!-- Animation Css -->
+  <link href="{% static 'plugins/animate-css/animate.css' %}" rel="stylesheet" />
+
+  <!-- Custom Css -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+
+  <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+  <link href="{% static 'css/themes/all-themes.css' %}" rel="stylesheet" />
+<!-- Colorpicker Css -->
+    <link href="{% static 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css' %}" rel="stylesheet" />
+
+    <!-- Dropzone Css -->
+    <link href="{% static 'plugins/dropzone/dropzone.css' %}" rel="stylesheet">
+
+    <!-- Multi Select Css -->
+    <link href="{% static 'plugins/multi-select/css/multi-select.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Spinner Css -->
+    <link href="{% static 'plugins/jquery-spinner/css/bootstrap-spinner.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Tagsinput Css -->
+    <link href="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet">
+
+
+    <!-- noUISlider Css -->
+    <link href="{% static 'plugins/nouislider/nouislider.min.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{%  static 'editormd/css/editormd.css' %}" />
+{% endblock %}
+
+
+{% block main_body %}
+
+<div class="container-fluid">
+  <ol class="breadcrumb breadcrumb-bg-orange">
+  <li><a href="{% url 'index:index_show' %}">首页</a></li>
+  <li class="active">博客列表</li>
+  </ol>
+  <!-- Basic Examples -->
+  <!-- Exportable Table -->
+  <!-- Basic Table -->
+  <div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="card">
+        <div class="header">
+          <h2 style="margin-top: 35px;margin-left: 20px">
+            <strong><i class="material-icons" style="font-size: 25px">assignment</i>&nbsp;博客列表</strong>
+            <small>仅支持博客标题,博客分类,用户名称;注意仅支持单个关键词</small>
+          </h2>
+        </div>
+
+        <form action="" method="GET">
+          <div class="row clearfix">
+            <div class="col-md-3 col-md-push-8" style="margin-top: -55px">
+              <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="material-icons" style="font-size: 25px">assignment</i>
+                </span>
+                <div class="form-line">
+                  <input type="text" class="form-control date" placeholder="搜索关键词" name="keywords" value="{{ keywords| default:'' }}">
+                </div>
+                  <button type="submit" style="margin-right: -50px;z-index: 9;float: right;margin-top: -6px" class="btn bg-red btn-circle waves-effect waves-circle waves-float">
+                                    <i class="material-icons">search</i>
+                    </button>
+                <!--<button type="submit" class="btn bg-red waves-effect" style="margin-right: -80px;z-index: 9;float: right;width: 70px">查询</button>-->
+
+              </div>
+
+            </div>
+
+          </div>
+        </form>
+      <!--</div>-->
+    <!--</div>-->
+           <div style="height: 60px"></div>
+
+    <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+      <!--<div class="card">-->
+          <!--<div class="body table-responsive">-->
+        <div class="container" style="width: 1500px;">
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th>序号</th>
+                          <th style="width: 200px">博客标题</th>
+                          <th>博客分类</th>
+                          <th>博客标签</th>
+                          <th>发表用户ID</th>
+                          <th>博客类型</th>
+                          <th>来源</th>
+                          <th>发布时间</th>
+                          <th>发布状态</th>
+                          <th>启用状态</th>
+                          <th>操作</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+
+                      {% for recode in result %}
+                          <tr>
+                              <!--序号-->
+                              <th scope="row" class="editid">{{ recode.id }}</th>
+                              <!--博客标题-->
+                              <td class="ntitle">{{ recode.title }}</td>
+                              <!--博客分类-->
+                              <td class="nblogcate">{{ recode.bgcate.title }}</td>
+                              <!--标签-->
+                              <td class="nblog_bq">{{ recode.label }}</td>
+                              <!--发表用户-->
+                              <td class="nusername">{{ recode.uid.username }}</td>
+                              <!--类型-->
+                              <td class="nyuanchuang">{{ recode.yuanchuang }}</td>
+                              <td>{{ recode.source }}</td>
+                              <!--添加时间-->
+                              <td>{{ recode.addtime }}</td>
+                              <!--评论状态-->
+                               <td class="if_comment" style="width: 200px">
+                               <div class="layui-form">
+                                 <select class="if__comment" style="width: 50px" lay-filter="ifcomment">
+                                    <option {% if recode.ifcomment == 0 %} selected {% endif %} value="0">公开</option>
+                                    <option {% if recode.ifcomment == 1 %} selected {% endif %} value="1">私密</option>
+                                    <option {% if recode.ifcomment == 2 %} selected {% endif %} value="2">公开但禁止评论</option>
+                                </select>
+                               </div>
+                              </td>
+
+
+                              <!--是否启用-->
+                              <td>
+                                  {% if recode.status == 1 %}
+                                      <div class="switch cgsta" id="{{ recode.id }}">
+                                          <label>开启<input class="ltype" type="checkbox" onclick="delfunc(this)" checked><span class="lever"></span>禁用</label>
+                                      </div>
+                                  {% else %}
+                                      <div class="switch cgsta" id="{{ recode.id }}">
+                                          <label>开启<input class="ltype" type="checkbox" onclick="delfunc(this)"><span class="lever"></span>禁用</label>
+                                      </div>
+                                  {% endif %}
+                              </td>
+
+                            <td><a type="btn" class="btn btn-info btn-xs editbtn" data-toggle="modal" data-target=".osoe" >编辑</a></td>
+                          </tr>
+                      {% endfor %}
+
+                  </tbody>
+              </table>
+          </div>
+
+
+
+          <nav>
+              <center>
+                  <ul class="pagination">
+                      {% PageShow totalpages request %}
+                  </ul>
+              </center>
+          </nav>
+      </div>
+    </div>
+</div>
+</div>
+
+
+<!--模态-->
+<!-- Modal -->
+    <div class="layui-form">
+<div class="modal fade osoe bs-example-modal-lg" id="myModal" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="background-color: rgba(0,0,0,0.3)">
+            <!--填充-->
+            <div class="container-fluid">
+                <!--面包屑-->
+                <ol class="breadcrumb breadcrumb-bg-blue" style="text-align: center">
+                    <li class="active">编辑博客</li>
+                </ol>
+                <!-- 博客基础信息编辑 -->
+                <div class="row clearfix">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="card">
+                            <div class="body">
+                                <br>{% csrf_token %}
+                                <input type="text" id="edit_id" style="display: none;">
+                                    <div class="row clearfix">
+                                        <!--博客所属博客分类   parent_id-->
+                                        <div class="col-md-4">
+                                            <p> <b>所属博客分类</b>
+                                            </p>
+                                            <select class="form-control show-tick" name="blogcate" lay-filter="blogcate">
+                                                <option value="0">---请选择---</option>{% for recode in blogcate %}
+                                                <option value="{{ recode.id }}">{{ recode.title }}</option>{% endfor %}</select>
+                                        </div>
+
+                                        <!--请选择内容格式  post_format-->
+                                        <div class="col-md-4">
+                                            <p> <b>博客发布形式</b>
+                                            </p>
+                                            <select class="form-control show-tick" name="blog_format" lay-filter="blog_format">
+                                                <option value="0">---请选择---</option>
+                                                <option value="1">公开</option>
+                                                <option value="2">私密</option>
+                                                <option value="3">公开但禁止评论</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row clearfix">
+                                        <!--行业分类   category_id-->
+                                        <div class="col-md-4">
+                                            <p> <b>所属文章类型</b>
+                                            </p>
+                                            <select class="form-control show-tick" lay-filter="bloglx" name="bloglx">
+                                                <option value="0">---请选择---</option>
+                                                <option value="1">原创</option>
+                                                <option value="2">转载</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6" id="ywlj" style="display: none">
+                                            <p> <b>请输入原文链接（请确保原文链接的有效性！）</b>
+                                            </p>
+                                            <div class="input-group">
+                                                <div class="col-md-8">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control date" placeholder="原文链接" name="before_url">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--所发表的用户  user_id-->
+                                    <div class="row clearfix">
+                                        <div class="col-md-7">
+                                            <p> <b>请输入发表的用户ID（注意是ID）</b>
+                                            </p>
+                                            <div class="input-group"> <span class="input-group-addon">
+                                      <i class="material-icons">assignment</i>
+                                  </span>
+                                                <div class="col-md-7">
+                                                    <div class="form-line">
+                                                        <input type="text" class="form-control date" placeholder="发表用户ID" name="user_id">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4"> <span id="user_name" style="color: #777777"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--分类专栏  flzl-->
+                                    <div class="row clearfix">
+                                        <div class="col-md-4">
+                                            <p> <b>请选择所属分类专栏</b>
+                                            </p>
+                                            <select name="blog_flzl" id="scselector" class="shortselect" lay-filter='blog_flzl'>
+                                                <option value="0">--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                <!--博客标题   post_title-->
+                                <div class="row clearfix">
+                                    <div class="col-md-7">
+                                        <p> <b>请输入博客标题</b>
+                                        </p>
+                                        <div class="input-group"> <span class="input-group-addon">
+                                      <i class="material-icons">assignment</i>
+                                  </span>
+                                            <div class="col-md-7">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control date" placeholder="博客标题" name="blog_title">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--博客标签   post_title-->
+                                <div class="row clearfix">
+                                    <div class="col-md-7">
+                                        <p> <b>请输入博客标签（多个标签用‘^’隔开）</b>
+                                        </p>
+                                        <div class="input-group"> <span class="input-group-addon">
+                                      <i class="material-icons">assignment</i>
+                                  </span>
+                                            <div class="col-md-7">
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control date" placeholder="博客标签" name="blog_bq">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--请输入博客内容  post_content-->
+                                <div class="row clearfix">
+                                    <div class="col-md-12">
+                                        <p> <b>请输入博客内容</b>
+                                        </p>
+                                        <div id="test-editor">
+                                            <textarea name="blog_content" style="display:none;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row clearfix">
+                                    <div class="col-md-12"> <a type="button" id="submin_btn" class="btn bg-blue btn-block waves-effect">提交</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end填充-->
+        </div>
+    </div>
+</div>
+    </div>
+{% endblock %}
+
+{% block endlinks %}
+ <!-- Jquery Core Js -->
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'editormd/editormd.js' %}"></script>
+
+    <script src="{% static 'plugins/bootstrap-notify/bootstrap-notify.js' %}"></script>
+
+
+    <!-- Bootstrap Core Js -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.js' %}"></script>
+
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="{% static 'plugins/node-waves/waves.js' %}"></script>
+
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="{% static 'plugins/jquery-datatable/jquery.dataTables.js' %}"></script>
+
+
+    <!-- Custom Js -->
+    <script src="{% static 'js/admin.js' %}"></script>
+    <script src="{% static 'js/pages/tables/jquery-datatable.js' %}"></script>
+
+    <script src="{% static 'js/delfunc.js' %}"></script>
+    <!-- Demo Js -->
+    <script src="{% static 'js/demo.js' %}"></script>
+<script>
+    //layui下拉框监听
+    layui.use('form', function () {
+        var form = layui.form;
+        //文章类型下拉框监听 转载框的弹出
+        form.on('select(bloglx)',function (data) {
+               if(data.value=='2'){
+                   $('#ywlj').show();
+               }else{
+                   $('#ywlj').hide();
+               }
+        });
+
+        //发布状态修改监听
+        form.on('select(ifcomment)',function (data) {
+           var ifcomment_id = $(this).parents('tr').children('.editid').text();
+           $.ajax({
+               async:true,
+               type:'post',
+               dataType:'json',
+               url:'{% url 'blog:uptateblog_ifcomment' %}',
+               data:{
+                   'csrfmiddlewaretoken':$('[name=csrfmiddlewaretoken]').val(),
+                   'ifcomment_id':ifcomment_id,
+                   'ifcomment':data.value,
+               },
+               success:function (data) {
+                   if(data.msg==1){
+                       layer.msg('修改成功！')
+                   }else {
+                        layer.msg('修改失败！')
+                   }
+               }
+           })
+        });
+        form.render('select');
+    });
+
+    // markdown 编译器配置
+        var testEditor;
+        var md;
+        var editormdmarkdown = function (md) {
+                testEditor = editormd("test-editor", {
+                    width: 830,
+                    height: 630,
+                    path: '{% static 'editormd/lib/' %}',
+                    markdown: md,
+                    toolbarAutoFixed : false,
+                    codeFold: true,
+                    saveHTMLToTextarea: true,
+                    searchReplace: true,
+                    {#htmlDecode: "style,script,iframe|on*",#}
+                    emoji: true,
+                    taskList: true,
+                    tocm: true,         // Using [TOCM]
+                    tex: true,                   // 开启科学公式TeX语言支持，默认关闭
+                    flowChart: true,             // 开启流程图支持，默认关闭
+                    sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,
+                    imageUpload: true,
+                    imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                    {#imageUploadURL: "{% static 'plugins/editor-1.md-master/examples/php/upload.php' %}",#}
+                    imageUploadURL: "/blog/uploadimg/",
+                    onload: function () {
+                        console.log('onload', this);
+                    },
+
+                    {#/**设置主题颜色 把这些注释去掉主题就是黑色的了*/#}
+                    {#editorTheme: "pastel-on-dark",#}
+                    {#theme: "dark",#}
+                    {#previewTheme: "dark"#}
+            });
+        };
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    $('.editbtn').click(function () {
+        flag = $(this);
+        var editid = $(this).parents('tr').children('.editid').text();
+        var csrf = $('[name=csrfmiddlewaretoken]').val();
+        $('#edit_id').val(editid);
+       $.ajax({
+           async: true,
+           type:'post',
+           url:'{% url "blog:edit_blog" %}',
+           dataType: 'json',
+           data:{'csrfmiddlewaretoken':csrf,'editid':editid},
+           success:function (data) {
+               if(data.msg==1){
+                   //layui监听
+                   layui.use('form',function () {
+                       var form = layui.form;
+                       $('[name=blogcate]').empty();
+                       $('[name=blog_format]').empty();
+                       $('[name=bloglx]').empty();
+                       $('[name=blog_flzl]').empty();
+                       $('[name=blogcate]').append(data.editinfo.bgcate);
+                       $('[name=blog_format]').append(data.editinfo.ifcomment);
+                       $('[name=bloglx]').append(data.editinfo.yuanchuang);
+                       $('[name=blog_flzl]').append(data.editinfo.zlid);
+                       //二次渲染
+                       form.render('select')
+                   });
+                   $('[name=before_url]').val(data.editinfo.beforeurl);
+                   $('[name=user_id]').val(data.editinfo.userid);
+                   $('[name=blog_title]').val(data.editinfo.title);
+                   $('[name=blog_bq]').val(data.editinfo.label);
+                   checkuser = true;
+                   if (data.editinfo.ifyuanchuang == 1){
+                       $('#ywlj').show();
+                   }
+                   editormdmarkdown(data.editinfo.ginfo);
+               }else{
+                   layer.msg('获取博客信息失败，请稍后重试！')
+               }
+           }
+       })
+    });
+
+
+//********************************************************************************
+    //对 username 的验证
+  var checkuser = false;
+    //验证用户名
+    $('[name=user_id]').click(function () {
+        $('#user_name').css('color', '#777777');
+        $('#user_name').html('<i class="material-icons" style="font-size: 15px">add_alert</i>&nbsp;&nbsp;&nbsp;请输入用户ID')
+    });
+    $('[name=user_id]').keyup(function () {
+        // console.log( $('[name=category_id]').val())
+        if ($(this).val()) {
+            $.ajax({
+                async: true,
+                type: 'get',
+                url: "{% url 'blog:checkuserid' %}",
+                dataType: 'json',
+                data: {'username': $(this).val()},
+                success: function (data) {
+                    if (data.msg == 1) {
+                        $('#user_name').css('color', '#777777');
+                        $('#user_name').html('<i class="material-icons" style="font-size: 15px">done</i>&nbsp;&nbsp;&nbsp;用户ID称验证通过');
+                        checkuser = true;
+                        xss = data.select_option;
+                        layui.use('form', function () {
+                            var form = layui.form;
+                            $('#scselector').empty();
+                            $('#scselector').append(xss);
+                            form.render('select');
+                        });
+                    } else {
+                        $('#user_name').css('color', 'red');
+                        $('#user_name').html('<i class="material-icons" style="font-size: 15px">error_outline</i>&nbsp;&nbsp;用户ID不存在！');
+                        layui.use('form', function () {
+                            var form = layui.form;
+                            $('#scselector').empty();
+                            $('#scselector').append("<option value='0'> --</option>");
+                            form.render('select');
+                        });
+                        checkuser = false
+                    }
+                }
+            })
+        } else {
+            $('#user_name').css('color', 'red');
+            $('#user_name').html('<i class="material-icons" style="font-size: 15px">error_outline</i>&nbsp;&nbsp;用户ID不能为空！');
+            checkuser = false
+        }
+
+    });
+
+
+    //提交对变量的验证
+     $('#submin_btn').click(function () {
+         var blogcate = $('[name=blogcate]').val();
+         var blog_format = $('[name=blog_format]').val();
+         var bloglx = $('[name=bloglx]').val();
+         var before_url = $('[name=before_url]').val();
+         var blog_flzl = $('[name=blog_flzl]').val();
+         var blog_title = $('[name=blog_title]').val();
+         var blog_bq = $('[name=blog_bq]').val();
+         var blog_content = $('[name=blog_content]').val();
+         console.log(blogcate,blog_format,bloglx,before_url,blog_flzl,blog_title,blog_bq,blog_content);
+         if (blogcate && blog_format && bloglx && blog_flzl && blog_title && blog_bq && blog_content && checkuser) {
+             $.ajax({
+                 async:true,
+                 type:'post',
+                 url:'{% url 'blog:update_blog' %}',
+                 dataType:'json',
+                 data:{
+                     csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val(),
+                     blogcate:blogcate,
+                     blog_format:blog_format,
+                     bloglx:bloglx,
+                     before_url:before_url,
+                     blog_flzl:blog_flzl,
+                     blog_title:blog_title,
+                     blog_bq:blog_bq,
+                     blog_content:blog_content,
+                     user_id:$('[name=user_id]').val(),
+                     edit_id:$('#edit_id').val()
+                 },
+                 success:function (data) {
+                     if(data.msg==1){
+                         swal('修改成功！','博客信息已修改！','success');
+                         layui.use('form',function () {
+                         var form = layui.form;
+                         flag.parents('tr').children('.if_comment').children('div').children('.if__comment').empty();
+                         flag.parents('tr').children('.if_comment').children('div').children('.if__comment').append(data.updateinfo.blog_format);
+                         //二次渲染
+                         form.render()
+                         });
+                         flag.parents('tr').children('.nyuanchuang').text(data.updateinfo.bloglx);
+                         flag.parents('tr').children('.nblogcate').text(data.updateinfo.blogcate);
+                         flag.parents('tr').children('.nusername').text(data.updateinfo.username);
+                         flag.parents('tr').children('.ntitle').text(blog_title);
+                         flag.parents('tr').children('.nblog_bq').text(blog_bq);
+                         $('#myModal').modal('hide')
+                     }else{
+                         swal('修改失败！',data.errormsg,'error')
+                     }
+                 },
+                 error:function () {
+                     layer.msg('网络出了一点问题····')
+                 }
+             })
+         }else if(checkuser === false){
+             $('#user_name').css('color','red');
+             $('#user_name').html('<i class="material-icons" style="font-size: 15px">error_outline</i>&nbsp;&nbsp;&nbsp;请输入用户ID');
+             swal('请输输入用户ID！','用户ID不合法！','error')
+         }else{
+             swal('信息填写不完整！','请检查并填写完整！','error')
+         }
+
+     })
+
+
+
+ </script>
+
+{% endblock %}

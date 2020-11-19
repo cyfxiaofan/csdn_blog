@@ -1,0 +1,316 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block title  %}ViP充值{% endblock %}
+{% block link %}
+    <!-- Favicon-->
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+    <!-- Bootstrap Core Css -->
+    <link href="{% static 'plugins/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="{% static 'plugins/node-waves/waves.css' %}" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="{% static 'plugins/animate-css/animate.css' %}" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="{% static 'css/themes/all-themes.css' %}" rel="stylesheet" />
+    <!-- Colorpicker Css -->
+    <link href="{% static 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css' %}" rel="stylesheet" />
+
+    <!-- Dropzone Css -->
+    <link href="{% static 'plugins/dropzone/dropzone.css' %}" rel="stylesheet">
+
+    <!-- Multi Select Css -->
+    <link href="{% static 'plugins/multi-select/css/multi-select.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Spinner Css -->
+    <link href="{% static 'plugins/jquery-spinner/css/bootstrap-spinner.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Tagsinput Css -->
+    <link href="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Select Css -->
+    <link href="{% static 'plugins/bootstrap-select/css/bootstrap-select.css' %}" rel="stylesheet" />
+    <link href="{% static 'plugins/vipbutton/css/style.css' %}" rel="stylesheet" />
+
+{% endblock %}
+
+
+
+{% block main_body %}
+<div class="container-fluid">
+      <ol class="breadcrumb breadcrumb-bg-orange">
+				<li><a href="">首页</a></li>
+				<li class="active">会员充值</li>
+      </ol>
+
+      <!-- 文章基础信息编辑 -->
+      <div class="row clearfix">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="card">
+                  <div class="body">
+                      <div class="header">
+
+                          <h2>
+                              <strong><i class="material-icons" style="font-size: 25px">account_circle</i>&nbsp;&nbsp; VIP充值</strong>
+                              <small>请在下方填写充值VIP用户的ID</small>
+                          </h2>
+                      </div>
+                      <br>
+                      <form id="mainFrom" action="" method="post">
+                      {% csrf_token %}
+                        <!--用户名-->
+
+
+                       <div class="row clearfix">
+                          <div class="col-md-7">
+                            <p>
+                              <b>请输入充值VIP用户ID（注意是ID）</b>
+
+                            </p>
+                              <div class="input-group">
+                                  <span class="input-group-addon">
+                                      <i class="material-icons">assignment</i>
+                                  </span>
+                                  <div class="col-md-7">
+                                      <div class="form-line">
+                                          <input type="text" class="form-control date" placeholder="充值用户ID" name="user_id">
+                                     </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                      <span id="user_name" style="color: #777777"></span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+
+                      <div class="row clearfix">
+                          <div class="col-md-10">
+                            <p>
+                              <b>请选择充值时长</b>
+
+                            </p>
+
+                          <div class="col-md-12">
+
+                                <div class="aui-current-box">
+                                    <a style="text-decoration: none;" class="aui-current-item this-card">
+                                        <!-- <div class="aui-reset-tag"><img src="images/tag.png" alt=""></div> -->
+                                        <div class="aui-current-item-hd">
+                                            <h1>30天</h1>
+{#                                            <h2>促销价:29.01</h2>#}
+{#                                            <h3>原价:29.99</h3>#}
+                                        </div>
+                                    </a>
+                                    <a style="text-decoration: none;" class="aui-current-item">
+
+                                        <div class="aui-current-item-hd">
+                                            <h1>90天</h1>
+{#                                            <h2>促销价:29.01</h2>#}
+{#                                            <h3>原价:29.99</h3>#}
+                                        </div>
+                                    </a>
+                                    <a style="text-decoration: none;" class="aui-current-item ">
+
+                                        <div class="aui-current-item-hd">
+                                            <h1>180天</h1>
+{#                                            <h2>促销价:29.01</h2>#}
+{#                                            <h3>原价:29.99</h3>#}
+                                        </div>
+                                    </a>
+                                    <a style="text-decoration: none;" class="aui-current-item">
+                                        <div class="aui-current-item-hd">
+                                            <h1>365天</h1>
+{#                                            <h2>促销价:29.01</h2>#}
+{#                                            <h3>原价:29.99</h3>#}
+                                        </div>
+                                    </a>
+
+                                    <a id="finally" style="text-decoration: none;" class="aui-current-item ">
+                                        <div class="aui-current-item-hd">
+                                            <h1 id="inputtext">自定义</h1>
+                                            <h3 style="margin-top: 6px">自定义天数</h3>
+                                        </div>
+                                    </a>
+
+
+                                <div class="clearfix"></div>
+                            </div>
+
+                              <input type="text"  name="vipdays"  value="30" style="display: none">
+
+
+                              </div>
+
+                          </div>
+                      </div>
+
+
+
+                      <div class="row clearfix">
+                          <div class="col-md-12">
+                              <a type="button" id="submin_btn" class="btn btn-block bg-orange  waves-effect"><i class="material-icons">send</i>&nbsp;提交</a>
+                          </div>
+                      </div>
+
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+{% endblock %}
+
+{% block endlinks %}
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+    <!-- Bootstrap Core Js -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.js' %}"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="{% static 'plugins/bootstrap-select/js/bootstrap-select.js' %}"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+
+    <!-- Bootstrap Colorpicker Js -->
+    <script src="{% static '' %}plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+
+    <!-- Dropzone Plugin Js -->
+    <script src="{% static 'plugins/dropzone/dropzone.js' %}"></script>
+
+    <!-- Input Mask Plugin Js -->
+    <script src="{% static 'plugins/jquery-inputmask/jquery.inputmask.bundle.js' %}"></script>
+
+    <!-- Multi Select Plugin Js -->
+    <script src="{% static 'plugins/multi-select/js/jquery.multi-select.js' %}"></script>
+
+    <!-- Jquery Spinner Plugin Js -->
+    <script src="{% static 'plugins/jquery-spinner/js/jquery.spinner.js' %}"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="{% static 'plugins/node-waves/waves.js' %}"></script>
+
+    <!-- Bootstrap Tags Input Plugin Js -->
+    <script src="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.js' %}"></script>
+
+    <!-- noUISlider Plugin Js -->
+
+    <!-- TinyMCE -->
+    <script src="{% static 'plugins/tinymce/tinymce.js' %}"></script>
+
+    <!-- Custom Js -->
+    <script src="{% static 'js/admin.js' %}"></script>
+
+    <!-- Demo Js -->
+    <script src="{% static 'js/demo.js' %}"></script>
+   <script src="{% static 'plugins/sweetalert/sweetalert.min.js' %}"></script>
+   <script type="text/javascript">{{ jscode|default:"" |safe }}</script>
+    <script>
+    var checkuser = false;
+    var checkvip = 30;
+    $('.aui-current-item').click(function(e){
+
+		$(this).addClass('this-card').siblings().removeClass('this-card');
+
+		$('#type-amount').html($(this).find('.cardAmount').html());
+
+		checkvip = $(this).find('h1').html().replace(/[^\d]/g,'');
+		$('[name=vipdays]').val(checkvip);
+		console.log(checkvip)
+
+	});
+
+	$('#finally').click(function(){
+		var inp = $('<input type="text" class="nb" onkeyup="value=value.replace(/[^\\d]/g,\'\')" >');
+		if ($('.nb').val() == '' || $('.nb').val()){
+
+		}else{
+		    //激活编辑框并获得焦点
+			$(this).find('h1').html(inp);
+            $('.nb').focus()
+		}
+
+		inp.blur(function(){
+		    checkvip = $('.nb').val();
+		    $('[name=vipdays]').val(checkvip);
+			var thisval = $('.nb').val()+'天';
+			if($('.nb').val() != ''){
+                $('#inputtext').html(thisval)
+            }else{
+			    $('#inputtext').html('自定义')
+                checkvip = false;
+            }
+		})
+	});
+
+
+     //验证用户名
+    $('[name=user_id]').click(function () {
+        $('#user_name').css('color', '#777777');
+        $('#user_name').html('<i class="material-icons" style="font-size: 15px">add_alert</i>&nbsp;&nbsp;&nbsp;请输入用户ID')
+    });
+    $('[name=user_id]').keyup(function () {
+        // console.log( $('[name=category_id]').val())
+        if ($(this).val()) {
+            $.ajax({
+                async: true,
+                type: 'get',
+                url: "{% url 'blog:checkuserid' %}",
+                dataType: 'json',
+                data: {'username': $(this).val()},
+                success: function (data) {
+                    if (data.msg == 1) {
+                        $('#user_name').css('color', '#777777');
+                        $('#user_name').html('<i class="material-icons" style="font-size: 15px">done</i>&nbsp;&nbsp;&nbsp;用户ID验证通过');
+                        checkuser = true;
+                        xss = data.select_option;
+                        layui.use('form', function () {
+                            var form = layui.form;
+                            $('#scselector').empty();
+                            $('#scselector').append(xss);
+                            form.render('select');
+                        });
+
+                    } else {
+                        $('#user_name').css('color', 'red');
+                        $('#user_name').html('<i class="material-icons" style="font-size: 15px">error_outline</i>&nbsp;&nbsp;用户ID不存在！');
+                        layui.use('form', function () {
+                            var form = layui.form;
+                            $('#scselector').empty();
+                            $('#scselector').append("<option value='0'> --</option>");
+                            form.render('select');
+                        });
+                        checkuser = false
+                    }
+                }
+            })
+        } else {
+            $('#user_name').css('color', 'red');
+            $('#user_name').html('<i class="material-icons" style="font-size: 15px">error_outline</i>&nbsp;&nbsp;用户ID不能为空！');
+            checkuser = false
+        }
+
+    });
+
+    //提交按钮
+    $('#submin_btn').click(function () {
+        if(checkuser && checkvip){
+            $('#mainFrom').submit()
+        }else if(checkuser == false){
+            $('#user_name').css('color','red');
+            $('#user_name').html('<i class="material-icons" style="font-size: 15px">error_outline</i>&nbsp;&nbsp;&nbsp;请输入用户ID');
+            swal('请输输入用户ID！','用户ID不合法！','error')
+        }else{
+            swal('vip天数有误！','请检查并重新选择！','error')
+        }
+    })
+
+    </script>
+
+{% endblock %}

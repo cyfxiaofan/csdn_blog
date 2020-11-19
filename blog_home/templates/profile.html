@@ -1,0 +1,216 @@
+{% extends './index.html' %}
+{% block up %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="always">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="publish" content="2019-08-19 19:27:00">
+    <meta name="report" content='{"pid":"i","disabled":"true"}'>
+    <link rel="stylesheet" href="../static/css/skeleton.css">
+    <link rel="stylesheet" href="../static/css/content_toolbar.css">
+    <link href="../static/css/app.b5445e30ac68cb79629a874a5f99.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link  href="../static/layui/css/layui.css"  rel="stylesheet">
+     <script type="text/javascript" src="../static/layui/layui.all.js"></script>
+    <script src="../static/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+     <link rel="stylesheet" type="text/css" href="{% static 'webuploader/webuploader.css' %}" />
+</head>
+
+<body>
+{% csrf_token %}
+{% endblock %}
+
+{% block down %}
+
+<div style="margin-top: 60px">
+    <div id="app">
+    <!---->
+    <div data-v-357a65ed="" class="container view">
+        <div data-v-357a65ed="" class="left_box">
+            <ul data-v-357a65ed="" class="aside">
+                <li data-v-357a65ed="" class="router-link-exact-active router-link-active">
+                    <a data-v-357a65ed="" href="/userprofile" class="zl">个人资料</a>
+                </li>
+                <li data-v-357a65ed="" class="">
+                    <a data-v-357a65ed="" href="/userprofile/collection-list" class="zl">我的收藏</a>
+                </li>
+                <li data-v-357a65ed=""><a data-v-357a65ed="" href="/userprofile/myblog" target="_blank" data-report-click="{&quot;mod&quot;:&quot;popu_790&quot;,&quot;dest&quot;:&quot;https://mp.csdn.net/console/article&quot;,&quot;extend1&quot;:&quot;我的博客&quot;}"
+                    class="zl">我的博客</a>
+                </li>
+                <li data-v-357a65ed="" class="">
+                    <a data-v-357a65ed="" href="/userprofile/mycomment"  class="zl">评论管理</a>
+                </li>
+            </ul>
+        </div>
+        <div class="view-container">
+            <div  class="cont view">
+                <div  class="right_cont">
+                    <h3  class="title">个人资料</h3>
+
+                    <div style="margin-top: 19px"></div>
+                    <div  class="user_info">
+                        <div  class="header" style="margin-left: 220px">
+                            <img  src="{{ userinfo.head_url }}" alt="" class="head" style="width: 80px;height: 80px;border-radius: 100%">
+                        </div>
+                        <!---->
+                        <div data-v-0d738edb="" class="right_c" style="margin-left: 300px">
+                            <div  class="right_info">
+                                <div  class="id_card">
+                                    <span data-v-0d738edb="" class="id_name">ID：{{ userinfo.userid }}</span>
+                                     <a data-v-0d738edb="" href="/user_{{ userinfo.userid }}" target="_blank"style="margin-top: -24px" class="user_home">个人主页</a>
+                                </div>
+                            </div>
+
+                            <div data-v-0d738edb="" class="line"></div>
+                            <div data-v-0d738edb="" class="nick"><span data-v-0d738edb=""></span>
+                                <span data-v-0d738edb="" class="mod">修改资料</span>
+                            </div>
+                            <ul data-v-0d738edb="" class="self">
+                                <li data-v-0d738edb="" class="comon">昵称：{{ userinfo.username }}</li>
+                            </ul>
+                            <!---->
+                            <div style="margin-top: 50px;display: none" id="edituser" >
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="row form-group">
+                                        <div class="col-xs-12 col-sm-12 control-col-pos col-pr-no col-pl-no">
+                                            <span>请输入用户名：</span>
+                                            <input type="text" placeholder="请输入用户名" id="username"  name="username"  class="form-control form-control-icon">
+                                            <label for="icon-close" class="icon-remove  icon-control js_icon hide">×</label>
+                                            <div class="control-col-pos control-email">
+                                                <ul class="email-list hide"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                     <div class="row">
+                                          <div class="col-md-6">
+                                            <p>
+                                            <b>请选择头像</b>
+                                          </p>
+                                              <div class="input-group">
+
+                                                  <div class="col-md-8">
+
+                                                  <div class="form-line">
+                                                      <img id="portrait" src="{{ userinfo.head_url }}" alt="" width="100" height="100">
+                                                      <input type="text"  hidden name="head_url" value="{{ userinfo.head_url }}">
+                                                      <br><br>
+                                                       <div  class="input-group">
+                                                        <label class="input-group-btn">
+                                                            <span class="btn layui-btn-warm">
+                                                                 <i class="layui-icon">&#xe67c;</i>上传图片
+                                                                <div id="filePicker" name="head_img"  >
+
+                                                                </div>
+                                                            </span>
+                                                        </label>
+
+                                                           <script>
+                                                               window.onload=function () {
+                                                                   $('[name="file"]').attr('onchange','showPreview(this)')
+                                                                   $('.webuploader-pick').removeClass('webuploader-pick')
+                                                               }
+                                                           </script>
+
+                                                     </div>
+                                                  </div>
+
+                                              </div>
+                                          </div>
+                                          </div>
+                                     </div>
+
+                                    <div style="margin-top: 100px;margin-left: 100px">
+                                          <button type="submit" class="btn layui-btn-warm col-md-5" >
+                                            提交
+                                        </button>
+                                        <a type="button" id="cancel" class="btn btn-primary col-md-5" style="margin-left: 100px">
+                                            取消
+                                        </a>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+
+                    $('.mod').click(function () {
+                        $('#edituser').show()
+                    });
+                    $('#cancel').click(function () {
+                        $('#edituser').hide()
+                    })
+                </script>
+                <!---->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+  <script type="text/javascript" src="{% static 'webuploader/webuploader.js' %}"></script>
+<script>
+    function showPreview(source) {
+      var file = source.files[0];
+      if(window.FileReader) {
+          var fr = new FileReader();
+          console.log(fr);
+          var portrait = document.getElementById('portrait');
+          fr.onloadend = function(e) {
+            portrait.src = e.target.result;
+          };
+          fr.readAsDataURL(file);
+          portrait.style.display = 'block';
+      }
+    }
+      //上传图片按钮
+	var uploader = WebUploader.create({
+	// 选完文件后，是否自动上传。
+	    auto: true,
+
+	    // swf文件路径
+	    swf: "{% static 'webuploader/Uploader.swf' %}",
+
+	    // 文件接收服务端。
+	    server: "/writeblog/updatauser/",
+
+	    // 选择文件的按钮。可选。
+	    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+	    pick: '#filePicker',
+
+	    // 只允许选择图片文件。
+	    accept: {
+	        title: 'Images',
+	        extensions: 'gif,jpg,jpeg,bmp,png',
+	        mimeTypes: 'image/*'
+	    }
+	});
+
+	//上传进度
+	uploader.on( 'uploadProgress', function( file, percentage ) {
+    console.log(percentage * 100 + '%');
+
+    });
+    //上传成功之后请求网络地址填入alt
+	uploader.on( 'uploadSuccess', function( file, response ) {
+    $('#portrait').attr('alt',response.file_name);
+    $('[name="head_url"]').attr('value',response.file_name)
+});
+</script>
+
+    <!--<script type="text/javascript" src="../static/js/smcp.min.js"></script>-->
+    <!--<script type="text/javascript" src="../static/js/publib_footer-1.0.2.js"></script>-->
+    <!--<script type="text/javascript" src="../static/js/manifest.694e8316def9aedf4c9d.js"></script>-->
+    <!--<script type="text/javascript" src="../static/js/app.5ad2a12c919e6ca3c993.js"></script>-->
+</body>
+{% endblock %}

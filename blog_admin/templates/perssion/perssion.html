@@ -1,0 +1,439 @@
+{% extends '../base.html' %}
+{% load static %}
+{% load adminpagetag %}
+{% block title %}管理员列表{% endblock %}
+{% block link %}
+ <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+
+  <!-- Bootstrap Core Css -->
+  <link href="{% static 'plugins/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+  <!-- Waves Effect Css -->
+  <link href="{% static 'plugins/node-waves/waves.css' %}" rel="stylesheet" />
+
+  <!-- Animation Css -->
+  <link href="{% static 'plugins/animate-css/animate.css' %}" rel="stylesheet" />
+
+  <!-- JQuery DataTable Css -->
+  <link href="{% static 'plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css' %}" rel="stylesheet" />
+
+  <!-- Custom Css -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+
+  <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+  <link href="{% static 'css/themes/all-themes.css' %}" rel="stylesheet" />
+<!-- Colorpicker Css -->
+    <link href="{% static 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css' %}" rel="stylesheet" />
+
+    <!-- Dropzone Css -->
+    <link href="{% static 'plugins/dropzone/dropzone.css' %}" rel="stylesheet">
+
+
+    <!-- Bootstrap Spinner Css -->
+    <link href="{% static 'plugins/jquery-spinner/css/bootstrap-spinner.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Tagsinput Css -->
+    <link href="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet">
+
+    <!-- noUISlider Css -->
+    <link href="{% static 'plugins/nouislider/nouislider.min.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="{% static 'webuploader/webuploader.css' %}" />
+{% endblock %}
+
+
+
+{% block main_body %}
+<div class="container-fluid">
+{% csrf_token %}
+  <ol class="breadcrumb breadcrumb-bg-orange">
+  <li><a href="{% url 'index:index_show' %}">首页</a></li>
+  <li class="active">管理员列表</li>
+  </ol>
+  <!-- Basic Examples -->
+  <!-- Exportable Table -->
+  <!-- Basic Table -->
+  <div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="card">
+        <div class="header">
+          <h2 style="margin-top: 35px;margin-left: 20px">
+            <strong><i class="material-icons" style="font-size: 25px">account_circle</i>&nbsp;&nbsp; 管理员管理</strong>
+            <small>支持用户名, 邮箱查询;注意仅支持单个关键词</small>
+          </h2>
+        </div>
+
+        <form action="" method="GET">
+          <div class="row clearfix">
+            <div class="col-md-3 col-md-push-8" style="margin-top: -55px">
+              <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="material-icons" style="font-size: 25px">perm_identity</i>
+                </span>
+                <div class="form-line">
+                  <input type="text" class="form-control date" placeholder="搜索关键词" name="keywords" value="{{ request.GET.keywords }}">
+                </div>
+                  <button type="submit" style="margin-right: -50px;z-index: 9;float: right;margin-top: -6px" class="btn bg-red btn-circle waves-effect waves-circle waves-float">
+                                    <i class="material-icons">search</i>
+                    </button>
+                <!--<button type="submit" class="btn bg-red waves-effect" style="margin-right: -80px;z-index: 9;float: right;width: 70px">查询</button>-->
+
+              </div>
+
+            </div>
+
+          </div>
+        </form>
+      <!--</div>-->
+    <!--</div>-->
+           <div style="height: 60px"></div>
+
+    <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+      <!--<div class="card">-->
+          <!--<div class="body table-responsive">-->
+        <div class="container" style="width: 1500px;">
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th>序号</th>
+                          <th>用户名</th>
+                          <th>邮箱</th>
+                          <th>添加时间</th>
+                          <th>权限</th>
+                          <th>操作</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for recode in adminuser %}
+                          <tr>
+                              <th scope="row" class="lid">{{ recode.id }}</th>
+                              <td class="lname">{{ recode.username }}</td>
+                              <td class="lemail">{{ recode.email }}</td>
+                              <td>{{ recode.date_joined }}</td>
+                              <td class="supercolor">
+                                  {% if recode.is_superuser == 1 %}
+                                  <span style="color: rgb(244,67,54)">超级管理员</span>
+                                  {% else %}
+                                  <span style="color:yellowgreen;">普通管理员</span>
+                                  {% endif %}
+                              </td>
+                            <td>
+                                <a href="" type="btn" class="btn btn-info btn-xs editbtn" data-toggle="modal" data-target=".bs-example-modal-lg" >编辑</a>
+                                <button href="" type="btn" class="btn btn-danger btn-xs " onclick="delthis(this)">删除</button>
+                                <button href="" type="btn" class="btn btn-warning btn-xs " onclick="resetpwd(this)">重置密码</button>
+                            </td>
+                          </tr>
+                      {% endfor %}
+
+                  </tbody>
+              </table>
+          </div>
+          <nav>
+              <center>
+                  <ul class="pagination">
+
+                  </ul>
+              </center>
+          </nav>
+      </div>
+    </div>
+</div>
+</div>
+
+
+<!--模态-->
+<!-- Modal -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="myModal" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="background-color: rgba(0,0,0,0.3)">
+      <!--填充-->
+
+        <div class="container-fluid">
+      <ol class="breadcrumb breadcrumb-bg-orange" style="text-align: center">
+				<li class="active">编辑管理员用户</li>
+      </ol>
+
+      <!-- 文章基础信息编辑 -->
+      <div class="row clearfix">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="card">
+                  <div class="body">
+                      <div class="header">
+                      </div>
+                      <br>
+                      {% csrf_token %}
+                        <!--用户名-->
+                      <div class="row clearfix">
+                          <input type="text" id="edit_id" hidden>
+                          <div class="col-md-6">
+                            <p>
+                              <b>管理员名称</b>
+                            </p>
+                              <div class="input-group">
+                                  <span class="input-group-addon">
+                                      <i class="material-icons">perm_identity</i>
+                                  </span>
+                                  <div class="col-md-8">
+                                      <div class="form-line">
+                                          <input type="text" class="form-control date" placeholder="请输入管理员名称" name="username" >
+                                     </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                      <span id="links_name" style="color: #777777"></span>
+                                  </div>
+                              </div>
+                          </div>
+                       <div style="margin-left: 190px;margin-top: 30px">
+                          <div class="switch cgsta">
+                          <label>普通管理员<input class="ltype" type="checkbox" name="is_super" ><span id="corse" class="lever"></span>超级管理员</label>
+                          </div>
+                      </div>
+
+                        </div>
+                          <!--邮箱-->
+                   <div class="row clearfix">
+                          <div class="col-md-6">
+                            <p>
+                            <b>用户邮箱</b>
+                          </p>
+                              <div class="input-group">
+                                  <span class="input-group-addon">
+                                      <i class="material-icons">email</i>
+                                  </span>
+                                  <div class="col-md-8">
+                                  <div class="form-line">
+                                      <input type="email" class="form-control date" placeholder="请输入邮箱" name="email" >
+                                  </div>
+                              </div>
+                          </div>
+                          </div>
+
+
+                      <div style="height: 100px"></div>
+
+                      <div class="row clearfix">
+                          <div class="col-md-12">
+                              <a type="button" id="cont" class="btn bg-red btn-block waves-effect"><i class="material-icons">send</i>&nbsp;提交</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+        <!--end填充-->
+  </div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block endlinks %}
+<!--上传图片-->
+ <!-- Jquery Core Js -->
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+    <script async="" src="https://www.google-analytics.com/analytics.js"></script>
+    <script src="{% static 'plugins/bootstrap-notify/bootstrap-notify.js' %}"></script>
+    <script src="{% static 'js/pages/ui/dialogs.js' %}"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.js' %}"></script>
+
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="{% static 'plugins/node-waves/waves.js' %}"></script>
+
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="{% static 'plugins/jquery-datatable/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/buttons.flash.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/jszip.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/pdfmake.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/vfs_fonts.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/buttons.print.min.js' %}"></script>
+    <!-- Custom Js -->
+    <script src="{% static 'js/admin.js' %}"></script>
+    <script src="{% static 'js/pages/tables/jquery-datatable.js' %}"></script>
+    <!-- delJS -->
+    <script src="{% static 'js/delfunc.js' %}"></script>
+    <!-- Demo Js -->
+    <script src="{% static 'js/demo.js' %}"></script>
+
+<script>
+    //信息读取
+    $('.editbtn').bind('click',function () {
+        //取值
+        editid = $(this).parents().children('.lid').text();
+        $('#edit_id').val(editid)
+        $.ajax({
+           async: true,
+           type:'POST',
+           dataType:'json',
+           url:'{% url "adminperssion:edit_this" %}',
+           data:{
+               csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val(),
+               editid:editid,
+           },
+            success:function (data) {
+               //填值
+                $('[name=username]').val(data.username);
+                $('[name=email]').val(data.email);
+                if(data.is_superuser){
+                    $('[name=is_super]').prop('checked',true)
+                }else{
+                    $('[name=is_super]').prop('checked',false)
+                }
+                $('[name=edit_group]').empty();
+                $('[name=edit_group]').append(data.group_option);
+                layui.form.render()
+            }
+        });
+        flag=$(this)
+    });
+
+    //提交按钮
+    $('#cont').click(function () {
+        var load = layer.load(3); //加载层
+        var uid = $('#edit_id').val();
+        var uname = $('[name=username]').val();
+        var uemail = $('[name=email]').val();
+        if ($("#corse").css('backgroundColor') === ('rgb(132, 199, 193)')){
+            var is_super = 1
+        }else{
+            var is_super = 0
+         }
+        var group_id =  $('[name=edit_group]').val();
+        var csrf_token = $("[name='csrfmiddlewaretoken']").val();
+        comments = {
+            csrfmiddlewaretoken:csrf_token,
+            uid:uid,
+            uname:uname,
+            uemail:uemail,
+            is_super:is_super,
+            group_id:group_id,
+        };
+        $.ajax({
+            async: true,
+            type: 'post',
+            url:"{% url 'adminperssion:edit_submit' %}",
+            data_type:'json',
+            data:comments,
+            success:function (data) {
+                if(data.msg==1){
+                      flag.parents('tr').find('.lname').text(uname);
+                      flag.parents('tr').find('.lemail').text(uemail);
+                      flag.parents('tr').find('.lgroup').text($('.layui-this').text());
+                      if ($("#corse").css('backgroundColor') === ('rgb(132, 199, 193)')){
+                            flag.parents('tr').find('.supercolor').children().css('color','rgb(244,67,54)')
+                            flag.parents('tr').find('.supercolor').children().text('超级管理员')
+                        }else{
+                            flag.parents('tr').find('.supercolor').children().css('color','yellowgreen')
+                            flag.parents('tr').find('.supercolor').children().text('普通管理员')
+                         }
+                         setTimeout(function () {
+                             layer.close(load); //回收加载遮罩
+                              swal("修改成功!", "修改信息已生效", "success");
+                             $('#myModal').modal('hide')
+                         },500)
+                }else{
+                    setTimeout(function () {
+                         layer.close(load); //回收加载遮罩
+                          swal("修改失败!",data.msg, "error");
+                    },500);
+
+                }
+            }
+        });
+    });
+
+    // 删除管理员
+    var delthis = function (obj) {
+        delid = $(obj).parents().children('.lid').text();
+        console.log(delid);
+        swal({
+        title: "确定要删除该管理员吗",
+        text: "删除之后将不可恢复！",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "确定!",
+        cancelButtonText: "取消!",
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true,
+    }, function () {
+        $.ajax({
+           async:true,
+           dataType: 'json',
+           type:'POST',
+           url:"{% url 'adminperssion:delthis' %}",
+           data:{
+               csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val(),
+               delid:delid,
+           },
+           success:function (data) {
+              if(data.msg==1){
+                  setTimeout(function () {
+                      swal("该管理员已删除!");
+                $(obj).parents('tr').remove()
+                  },1000)
+
+            }else{
+                swal('删除失败',data.msg,'error')
+            }
+           }
+
+           }
+        );
+    });
+    };
+
+// 重置密码
+var resetpwd = function (obj) {
+     resetid = $(obj).parents().children('.lid').text();
+             swal({
+        title: "确定要重置密码吗",
+        text: "重置之后该管理员的密码将被设置为123456！",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "确定!",
+        cancelButtonText: "取消!",
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true,
+    }, function () {
+        $.ajax({
+           async:true,
+           dataType: 'json',
+           type:'POST',
+           url:"{% url 'adminperssion:resetpwd' %}",
+           data:{
+               csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val(),
+               resetid:resetid,
+           },
+           success:function (data) {
+              if(data.msg==1){
+                  setTimeout(function () {
+                      swal("密码已重置!");
+                  },1000)
+
+            }else{
+                swal('重置密码失败',data.msg,'error')
+            }
+           }
+
+           }
+        );
+    });
+}
+
+
+
+</script>
+{% endblock %}

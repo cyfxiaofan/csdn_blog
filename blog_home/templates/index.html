@@ -1,0 +1,360 @@
+{% block up %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3Q-专业IT技术社区 </title>
+    <script src='static/js/www.js' type='text/javascript'></script>
+    <link rel="stylesheet" href="static/css/content_toolbar.css">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/avatar.css">
+    <script src="static/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <link href='static/css/csdn_feed.css' rel='stylesheet'>
+    <link  href="static/layui/css/layui.css"  rel="stylesheet">
+     <script type="text/javascript" src="static/layui/layui.all.js"></script>
+</head>
+
+<body data-category="home" data-host_type="www">
+    {% csrf_token %}
+    {% endblock %}
+
+    {% block toolbar %}
+    <div id="csdn-toolbar" class="csdn-toolbar tb_disnone " style="position: fixed; top: 0px; left: 0px; width: 100%;z-index: 10000;box-shadow: 0 0 0 1px rgba(0,0,0,0.2);">
+    <div class="container row center-block " id="csdn_container_tool">
+        <form id="search_form" action="/search" method="get">
+        <ul class="pull-left left-menu clearfix" id="nav-left-menu">
+            <li>
+                <a href="/" title="3Q首页" class="">
+                    <img src="https://jiamengweb.oss-cn-beijing.aliyuncs.com/3Q.jfif" class="csdn-logo" style="width: 45px;height: 40px;margin-left: 30px">
+                </a>
+            </li>
+            <li ><a href="/" class="{% if request.path == '/' %} active {% endif %}" title="首页" style="margin-left:0">首页</a>
+            </li>
+
+            
+            <li class="vip-caise"><a  class="{% if request.path == '/vip/' %} active {% endif %}" href="/vip" title="VIP会员">VIP会员</a>
+            </li>
+
+                <div class="search_bar onlySearch searchUser" style="margin-left: 240px">
+                    <input type="text" class="input_search" name="search" autocomplete="off" value="{{ search_str }}" id="toolber-keyword" placeholder="搜3Q">
+                    <a class="btn-nobg-noborder btn-search">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </a>
+                </div>
+        </ul>
+        </form>
+        <script>
+            $('.btn-search').click(function () {
+                $('#search_form').submit()
+            })
+        </script>
+        <div class="pull-right onlyUser searchUser login-wrap ">
+            <ul class="btns">
+                <li class="write-bolg-btn">
+                    <a class=""  target="_blank" id="blogClick" style="cursor: pointer"> <i class="csdn-write"></i>
+                        <span>写博客</span>
+                    </a>
+                </li>
+                <script>
+                    $('#blogClick').click(function () {
+                        if( '{{ request.session.userinfo.username }}' ){
+                            location.href='/writeblog';
+                        }else{
+                            layer.msg('请先登录！')
+                        }
+                    })
+                </script>
+                <!--<li class="gitChat upload msgBox" id="msgBox">-->
+                    <!--<a class="" id="remind" href="https://i.csdn.net/#/msg/index">-->
+                        <!--<i class="message"></i>-->
+                        <!--<div class="toolbar-circle" id="msg-circle"></div>-->
+                    <!--</a>-->
+                    <!--<div class="msgList" id="msgList">-->
+                        <!--<dd><a href="https://blog.csdn.net/blogdevteam/article/details/105203745" id="msgList-notice">公告<em class="notice"></em></a>-->
+                        <!--</dd>-->
+                        <!--<div id="msgList-other">-->
+                            <!--<dd><a href="//i.csdn.net/#/msg/index">评论<em class="comment"></em></a>-->
+                            <!--</dd>-->
+                            <!--<dd><a href="//i.csdn.net/#/msg/attention">关注<em class="follow"></em></a>-->
+                            <!--</dd>-->
+                            <!--<dd><a href="//i.csdn.net/#/msg/like">点赞<em class="thumb_up"></em></a>-->
+                            <!--</dd>-->
+                            <!--<dd><a href="//im.csdn.net/im/main.html">私信<em class="im"></em></a>-->
+                            <!--</dd>-->
+                            <!--<dd><a href="//i.csdn.net/#/msg/answer">回答<em class="invitation"></em></a>-->
+                            <!--</dd>-->
+                            <!--<dd><a href="//i.csdn.net/#/msg/notice">系统通知<em class="system"></em></a>-->
+                            <!--</dd>-->
+                            <!--<dd><a href="https://i.csdn.net/#/msg/setting">消息设置</a>-->
+                            <!--</dd>-->
+                        <!--</div>-->
+                    <!--</div> -->
+                <!--</li>-->
+
+                {% if not request.session.userinfo %}
+                <li class="userinfo">
+                    <a href="/login">登录/注册</a>
+                    <span></span>
+                </li>
+                {% endif %}
+
+                {% if  request.session.userinfo %}
+                <li class="userLogin" >
+                    <div class="loginCenter">
+                        <a href="" target="_blank">
+                            <img class="login_img" src="{{ request.session.userinfo.userimg }}">
+                        </a>
+                    </div>
+                    <div class="userControl" style="margin-top: 1px">
+                        <div class="bord">
+                            <div ><i class="pull_icon pull_icon2"></i><a href="/userprofile/collection-list" target="_blank">我的收藏</a>
+                            </div>
+                            <div ><i class="pull_icon pull_icon4"></i><a href="/userprofile" target="_blank">个人中心</a>
+                            </div>
+                        </div>
+                        <div class="bord">
+                            <div ><i class="pull_icon pull_icon5"></i><a href="/userprofile/myblog" target="_blank">我的博客</a>
+                            </div>
+                            <div ><i class="pull_icon pull_icon6"></i><a href="/userprofile/mycomment" target="_blank">评论管理</a>
+                            </div>
+
+                        </div>
+
+                        <div class="bord">
+                            <div><i class="pull_icon pull_icon11"></i><a href="javascript:void(0);"  class="logout">退出</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="guo_tip_box">关注和收藏在这里</div>
+                </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</div>
+                <script>
+                    $('.userinfo').show();
+                    $('.userLogin').show();
+                    $('.userLogin').mouseenter(function () {
+                        $('.userControl').show()
+                    });
+                    $('.userLogin').mouseleave(function () {
+                            $('.userControl').hide()
+                    });
+                    $('.logout').click(function () {
+                        $.ajax({
+                            async: true,
+                            dataType:'json',
+                            type:'post',
+                            url:'{% url "login:userlogout" %}',
+                            data:{
+                                csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val(),
+                                user_id:"{{ request.session.userinfo.userid }}"
+                            },
+                            success:function (data) {
+                              if(data.msg==1){
+                                  layer.msg('退出成功！');
+                                  setTimeout(function () {
+                                      location.reload();
+                                  },1000);
+
+                              }else{
+                                  layer.msg('网络繁忙，请稍后重试！')
+                              }
+                            }
+                        })
+                    })
+                </script>
+    {% endblock %}
+{% block down %}
+    <div style="margin-top: 35px">
+    <div class="container clearfix" >
+        <nav id="nav" class="clearfix" style="position: fixed">
+            <div class="clearfix">
+                <div class="nav_com">
+                    <ul>
+                        {% for pre_blogcate in blogcate %}
+                        <li class=" {% if request.GET.path == pre_blogcate.path  %} active {% elif  not request.GET.path  and pre_blogcate.title == '推荐'  %} active {% endif %}"><a href="/?path={{ pre_blogcate.path }}">{{ pre_blogcate.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="fixed_content">
+            <main>
+                <!DOCTYPE html>
+                <div class="carousel">
+                    <div class="carousel-left">
+                        <div id="myCarousel" class="slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                <li data-target="#myCarousel" data-slide-to="1" class=""></li>
+                                <li data-target="#myCarousel" data-slide-to="2" class=""></li>
+                                <li data-target="#myCarousel" data-slide-to="3" class=""></li>
+                            </ol>
+                            <div class="carousel-inner" role="listbox" >
+                                {% for pre_banner in bannerinfo %}
+                                <div class="carousel-item  {%  if forloop.counter == 1 %} active {% endif %}" data-report-click='{"index":"{{ forloop.counter0 }}"}'>
+                                    <a href="{{ pre_banner.blog_url }}" target="_blank">
+                                        <img src="{{ pre_banner.pic_url }}">
+                                    </a>
+                                    <a href="{{ pre_banner.blog_url }}" target="_blank">
+                                        <div class="carousel-caption">{{ pre_banner.blog_title }}</div>
+                                    </a>
+                                    <a href="{{ pre_banner.blog_url }}" target="_blank" style="display:block;">
+                                        <div class='cover'></div>
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev"> 
+                                <span class="glyphicon" aria-hidden="true">
+                                  <svg viewbox="0 0 19 30">
+                                    <path d="M18,5L7,16l11,11l-3,3L1,16L15,2L18,5z"></path>
+                                  </svg>
+                                </span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+
+                            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                                <span class="glyphicon" aria-hidden="true">
+                                  <svg viewbox="0 0 19 30">
+                                    <path d="M4,1l14,14L4,29l-3-3l11-11L1,4L4,1z"></path>
+                                  </svg>
+                                </span>
+                                <span class="sr-only">Next</span>
+                            </a>
+
+                        </div>
+                        <!-- /.carousel -->
+                    </div>
+                </div>
+
+                <ul class="feedlist_mod home" id="feedlist_id">
+                    {% for pre_blog in bloginfo %}
+                    <li class="clearfix">
+                        <div class="list_con">
+                            <div class="title">
+                                <h2>
+                            <a href="/user_{{ pre_blog.uid.userid }}/blog_{{ pre_blog.id }}" >{{ pre_blog.title}}</a>
+                            </h2>
+                            <div class="summary oneline">作者 | {{ pre_blog.uid.username }} | {{ pre_blog.ginfo }}…<div class="."></div>.</div>
+                            <dl class="list_userbar">
+                             <dt>
+                            <a href="/user_{{ pre_blog.uid.userid }}" target="_blank" class="user_img">
+                            <img src="{{ pre_blog.uid.head_url }}"  username="{{ pre_blog.uid.userid }}">
+                        </a>
+                         </dt>
+                                <dd class="name">
+                                    <a href="javascript:;" target="_blank">{{ pre_blog.uid.username }}</a>
+                                </dd>
+                                <div class="interactive floatR">
+                                    <!--阅读 begin-->
+                                    <dd class="read_num">
+                                        <a href="/user_{{ pre_blog.uid.userid }}/blog_{{ pre_blog.id }}" >
+                                            <span class="text">
+                                                 <img src="https://jiamengweb.oss-cn-beijing.aliyuncs.com/hot.png" alt="" style="margin-top: -2px">
+                                            </span>
+                                            <span class="num">{{ pre_blog.look }}</span>
+                                        </a>
+                                    </dd>
+                                    <!--新增评论数+阅读 end-->
+                                </div>
+                            </dl>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+
+                </ul>
+            </main>
+            <!DOCTYPE html>
+            <aside>
+
+                <div class="right_box">
+                    <h3 class="feed_new_tit">
+                        <span class="line"></span>
+                        <span class="txt">今日推荐</span>
+                    </h3>
+                    <div class="feed_company csdn-tracking-statistics" data-dsm="post">
+                        <ul class="company_list">
+                            {% for pre_today in today_top %}
+                            <li>
+                                <!--<div class="img_box" style="height: 40px">-->
+                                    <!--<a href="javascript:;" target="_blank">-->
+                                        <!--<img src="{{ pre_today.uid.head_url }}" alt="">-->
+                                    <!--</a>-->
+                                <!--</div>-->
+                                <div class="content">
+                                    <h3 class="company_name">
+                                        <a  href="/user_{{ pre_today.uid.userid }}/blog_{{ pre_today.id }}" target="_blank">{{ pre_today.title }}</a></h3>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="other_company clearfix"></div>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </div>
+    </div>
+
+</body>
+<script src='static/js/modernizr.js' type='text/javascript'></script>
+<script src="static/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="static/js/report.js" type="text/javascript"></script>
+<script src="static/js/fixed-sidebar.js" type="text/javascript"></script>
+<script type="text/javascript" src="static/js/user-tooltip.js"></script>
+<script language="javascript" type="text/javascript">
+
+     var totalHeight = $(document).height();//整个文档高度
+     var seeHeight = $(window).height();//浏览器可视窗口高度
+     var thisBodyHeight = $(document.body).height();//浏览器当前窗口文档body的高度
+     var totalBodyHeight = $(document.body).outerHeight(true);//浏览器当前窗口文档body的总高度 包括border padding margin
+     var thisWidth = $(window).width(); //浏览器当前窗口可视区域宽度
+     var thisDocumentWidth = $(document).width();//浏览器当前窗口文档对象宽度
+     var thisBodyWidth = $(document.body).width();//浏览器当前窗口文档body的宽度
+     var totalBodyWidth = $(document.body).outerWidth(true);//浏览器当前窗口文档body的总宽度 包括border padding margin
+     var scrollTop = $(window).scrollTop();//浏览器可视窗口顶端距离网页顶端的高度（垂直偏移）
+     // console.log(totalHeight,seeHeight,thisBodyHeight,totalBodyHeight,thisWidth,thisDocumentWidth,thisBodyWidth,totalBodyWidth,scrollTop);
+     //添加滚动事件
+    var is_lock = 1;
+    var get_blog = 1;
+     $(window).scroll(function(){
+         scrollTop = $(window).scrollTop();
+         totalHeight = $(document).height();
+         // console.log(scrollTop,seeHeight,totalHeight)
+         if(scrollTop+seeHeight+50>totalHeight && is_lock ==1 ){
+             var load = layer.load(3);
+             is_lock = 0;
+             $.get('{{ request.get_full_path }}',{get_blog:get_blog},function (data) {
+                 if (data.msg == 1){
+                    $('#feedlist_id').append(data.bloginfo_html);
+                     get_blog = Number(get_blog)+1;
+                     layer.close(load);
+                     setTimeout(function () {
+                         is_lock = 1;
+                     },1000);
+                 }else{
+                     layer.msg(data.msg,{'anim':6});
+                     layer.close(load);
+                     setTimeout(function () {
+                         is_lock = 1;
+                     },1000);
+                 }
+             });
+         }
+     })
+</script>
+<script src='static/js/publib_footer-1.0.3.js' data-isfootertrack="false"></script>
+<script src='static/js/csdn_feed.min.js' type='text/javascript'></script>
+<script src="static/js/side-toolbar.js"></script>
+
+</html>
+{% endblock %}

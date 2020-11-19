@@ -1,0 +1,380 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3Q-写博客</title>
+    <link rel="stylesheet" href="{%  static 'editormd/css/editormd.css' %}" />
+    <script src="../static/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <link  href="../static/layui/css/layui.css"  rel="stylesheet">
+    <script type="text/javascript" src="../static/layui/layui.all.js"></script>
+    <script src="../static/js/passport.js" type="text/javascript"></script>
+    <link href="../static/css/login.d77cb53619f7d2efa44d6f1fab.css" rel="stylesheet">
+    <link href="../static/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+</head>
+<body>
+{% csrf_token %}
+  <div class="row clearfix">
+      <div class="container" style="width: 1920px">
+
+          <div style="float: left">
+              <a href="\">
+                  <i class="layui-icon layui-icon-left" style="font-size: 30px"></i>
+              </a>
+          </div>
+            <div class="col-md-1" style="margin-top: 5px">
+                <img src="{{ request.session.userinfo.userimg }}" alt="" style="width: 35px;height: 35px;">
+            </div>
+
+          <div class="form-group col-md-6">
+                <p class="col-xs-4 col-sm-4 control-col-pos col-pr-no col-pl-no">
+
+                    <b style="float: right;line-height: 44px;font-size: 18px">请输入博客标题 &nbsp;&nbsp;&nbsp;</b>
+                </p>
+                <div class="col-xs-8 col-sm-8 control-col-pos col-pr-no col-pl-no" style="margin-top: 5px">
+                    <!---->
+                    <input type="text" placeholder="请输入博客标题" id="blog_title" value="{{ edit_obj.title }}" name="blog_title"  class="form-control form-control-icon">
+                </div>
+            </div>
+
+          <div class="col-md-3">
+              <center>
+              <button id="sendblog" class="btn layui-btn-warm" data-toggle="modal" data-target=".osoe" style="margin-top: 8px;height: 32px;width: 180px">
+              <b>发表博客</b>
+              </button>
+                  </center>
+          </div>
+
+          <div style="float: right">
+            <button id="changemk" class="btn layui-btn-primary" style="margin-top: 8px;height: 32px;width: 180px">
+              <b>切换风格</b>
+              </button>
+          </div>
+
+      </div>
+  </div>
+        <div id="test-editor">
+            <textarea name="blog_content" style="display:none;">{{ edit_obj.ginfo }}</textarea>
+        </div>
+
+
+  <script>
+       // markdown 编译器配置
+        var testEditor;
+        var mk_day = function () {
+            $.get("{% static 'editormd/examples/test.md' %}", function (md) {
+                testEditor = editormd("test-editor", {
+                    width: "99%",
+                    height: 880,
+                    path: "{% static 'editormd/lib/' %}",
+                    markdown: md,
+                    codeFold: true,
+                    saveHTMLToTextarea: true,
+                    searchReplace: true,
+                    htmlDecode: "style,script,iframe|on*",
+                    emoji: true,
+                    taskList: true,
+                    tocm: true,         // Using [TOCM]
+                    tex: true,                   // 开启科学公式TeX语言支持，默认关闭
+                    flowChart: true,             // 开启流程图支持，默认关闭
+                    sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,
+                    imageUpload: true,
+                    imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                    imageUploadURL: "/writeblog/uploadimg/",
+                    onload: function () {
+                        console.log('onload', this);
+                    },
+                    // editorTheme: "pastel-on-dark",
+                    theme: "dark",
+                    // previewTheme: "dark"
+                });
+            });
+        };
+
+         var mk_night = function () {
+            $.get("{% static 'editormd/examples/test.md' %}", function (md) {
+                testEditor = editormd("test-editor", {
+                    width: "99%",
+                    height: 880,
+                    path: "{% static 'editormd/lib/' %}",
+                    markdown: md,
+                    codeFold: true,
+                    saveHTMLToTextarea: true,
+                    searchReplace: true,
+                    htmlDecode: "style,script,iframe|on*",
+                    emoji: true,
+                    taskList: true,
+                    tocm: true,         // Using [TOCM]
+                    tex: true,                   // 开启科学公式TeX语言支持，默认关闭
+                    flowChart: true,             // 开启流程图支持，默认关闭
+                    sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,
+                    imageUpload: true,
+                    imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                    imageUploadURL: "/writeblog/uploadimg/",
+                    onload: function () {
+                        console.log('onload', this);
+                    },
+                    editorTheme: "pastel-on-dark",
+                    theme: "dark",
+                    previewTheme: "dark"
+                });
+            });
+        };
+        //默认是白色风格
+        $(mk_day());
+        //交替执行函数
+         $.prototype["myToggle"] = function () {
+            var args = arguments;
+            var that = this;
+            var i = 0;
+            var n = args.length;
+
+            this.click(function () {
+                var func = args[i%n];
+                if (typeof func === 'function') {
+                    func.call(that);
+                }
+                i += 1;
+
+                return false;
+            });
+        };
+         $('#changemk').myToggle(mk_night,mk_day)
+  </script>
+
+
+</body>
+<!--模态-->
+<!-- Modal -->
+<div class="layui-form">
+    <div class="modal fade osoe bs-example-modal-lg" id="myModal" >
+        <div class="modal-dialog modal-lg" style="width: 800px">
+            <div class="modal-content" style="background-color: white">
+                <!--填充-->
+                   <div class="container-fluid">
+                    <!--面包屑-->
+                   <div style="height: 10px"></div>
+                    <ol  style="text-align: center">
+                        <li class="active"><b>发表博客</b></li>
+                    </ol>
+                    <!-- 博客基础信息编辑 -->
+                    <div class="row clearfix">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="card">
+                                <div class="body">
+                                    <br>
+                                    {% csrf_token %}
+                                        <div class="row clearfix">
+                                            <!--博客所属博客分类   parent_id-->
+                                            <div class="col-md-4">
+                                                <p> <b>所属博客分类</b>
+                                                </p>
+                                                <select class="form-control show-tick" name="blogcate" lay-filter="blogcate">
+                                                    <option value="0">--</option>
+                                                    {% for recode in blogcate %}
+                                                    {% if recode.id == edit_obj.bgcate.id %}
+                                                    <option value="{{ recode.id }}" selected>{{ recode.title }}</option>
+                                                    {% else %}
+                                                    <option value="{{ recode.id }}">{{ recode.title }}</option>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                            <!--请选择内容格式  post_format-->
+                                            <div class="col-md-4">
+                                                <p> <b>博客发布形式</b>
+                                                </p>
+                                                <select class="form-control show-tick" name="blog_format" lay-filter="blog_format">
+                                                    <option value="0"  >--</option>
+                                                    <option value="1" {% if edit_obj.ifcomment == 0 %} selected {% endif %} >公开</option>
+                                                    <option value="2" {% if edit_obj.ifcomment == 1 %} selected {% endif %} >私密</option>
+                                                    <option value="3" {% if edit_obj.ifcomment == 2 %} selected {% endif %} >公开但禁止评论</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row clearfix">
+                                            <!--行业分类   category_id-->
+                                            <div class="col-md-4">
+                                                <p> <b>所属文章类型</b>
+                                                </p>
+                                                <select class="form-control show-tick" lay-filter="bloglx" name="bloglx">
+                                                    <option value="0">--</option>
+                                                    <option value="1" {% if edit_obj.yuanchuang == 0 %} selected {% endif %} >原创</option>
+                                                    <option value="2" {% if edit_obj.yuanchuang == 1 %} selected {% endif %} >转载</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-5" id="ywlj" {% if edit_obj.yuanchuang != 1  %} style="display: none" {% endif %}>
+                                                <p> <b>请输入原文链接（请确保原文链接的有效性！）</b>
+                                                </p>
+                                                <div class="input-group" style="width: 100%">
+                                                    <input type="text" class="form-control " value="{{ edit_obj.beforeurl }}" placeholder="原文链接" name="before_url">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--分类专栏  flzl-->
+                                        <div class="row clearfix">
+                                            <div class="col-md-4">
+                                                <p> <b>请选择所属分类专栏</b>
+                                                </p>
+                                                <select name="blog_flzl" id="scselector" class="shortselect" lay-filter='blog_flzl'>
+                                                    <option value="0">--</option>
+                                                    {% for recode in zlid_obj %}
+                                                    {% if edit_obj.zlid.id != recode.id %}
+                                                        <option value="{{ recode.id }}">{{ recode.title }}</option>
+                                                    {% else %}
+                                                        <option value="{{ recode.id }}" selected>{{ recode.title }}</option>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div style="height: 31px"></div>
+                                            <div class="col-md-4">
+                                                <div class="input-group" style="width: 100%">
+                                                    <input type="text" class="form-control " placeholder="分类专栏名称" name="flzl">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1" style="height: 25px;">
+                                                <button class="btn layui-btn-warm" id="addzl">
+                                                    新建专栏
+                                                </button>
+                                            </div>
+                                        </div>
+
+
+                                    <!--博客标签   post_title-->
+                                    <div class="row clearfix">
+                                        <div class="col-md-4">
+                                            <p> <b>请输入博客标签</b>
+                                            </p>
+                                            <div class="input-group" style="width: 100%">
+
+                                                <input type="text" class="form-control date" placeholder="博客标签" value="{{ edit_obj.label }}" name="blog_bq">
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="height: 100px"></div>
+
+                                    <div class="row clearfix">
+                                        <div class="col-md-12"> <a type="button" id="submin_btn" class="btn layui-btn-warm btn-block">提交</a>
+                                        </div>
+                                    </div>
+
+                                    <div style="height: 200px">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end填充-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'editormd/editormd.js' %}"></script>
+<script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<script>
+     //layui下拉框监听
+    layui.use('form', function () {
+        var form = layui.form;
+        //文章类型下拉框监听 转载框的弹出
+        form.on('select(bloglx)',function (data) {
+               if(data.value=='2'){
+                   $('#ywlj').show();
+               }else{
+                   $('#ywlj').hide();
+               }
+        });
+
+        form.render('select');
+    });
+    //新建专栏
+    $('#addzl').click(function () {
+        var flzl = $('[name=flzl]').val();
+        $.ajax({
+            async: true,
+            dataType:'json',
+            type:'post',
+            url:"{% url 'writeblog:addflzl' %}",
+            data:{
+              csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val(),
+              flzl:flzl
+            },
+            success:function (data) {
+                if(data.msg == 1){
+                    layer.msg('新建专栏成功!');
+                    layui.use('form', function () {
+                        var form = layui.form;
+                        $('#scselector').append(data.zl_html);
+                        form.render('select');
+                    });
+                }else{
+                    layer.msg(data.msg)
+                }
+            }
+        })
+    });
+    //提交
+    $('#submin_btn').click(function () {
+         var edit_id = '{{ request.GET.editid }}';
+         if(edit_id === ''){
+             var edit_id = 'none'
+         }
+         console.log(edit_id);
+         var blogcate = $('[name=blogcate]').val();
+         var blog_format = $('[name=blog_format]').val();
+         var bloglx = $('[name=bloglx]').val();
+         var before_url = $('[name=before_url]').val();
+         var blog_flzl = $('[name=blog_flzl]').val();
+         var blog_title = $('[name=blog_title]').val();
+         var blog_bq = $('[name=blog_bq]').val();
+         var blog_content = $('[name=blog_content]').val();
+         console.log(blogcate,blog_format,bloglx,before_url,blog_flzl,blog_title,blog_bq,blog_content);
+         if (blogcate && blog_format && bloglx && blog_flzl && blog_title && blog_bq && blog_content) {
+             $.ajax({
+                 async:true,
+                 type:'post',
+                 url:"{% url 'writeblog:useradd_blog' %}",
+                 dataType:'json',
+                 data:{
+                     csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val(),
+                     blogcate:blogcate,
+                     blog_format:blog_format,
+                     bloglx:bloglx,
+                     before_url:before_url,
+                     blog_flzl:blog_flzl,
+                     blog_title:blog_title,
+                     blog_bq:blog_bq,
+                     blog_content:blog_content,
+                     edit_id:edit_id
+                 },
+                 success:function (data) {
+                     if(data.msg==1){
+                         layer.msg("博客已发布！");
+                         $('#myModal').modal('hide')
+                     }else if(data.msg == 2){
+                         layer.msg('博客更新成功！')
+                         $('#myModal').modal('hide')
+                     }
+                     else{
+                         layer.msg(data.msg)
+                     }
+                 },
+                 error:function () {
+                     layer.msg('网络出了一点问题····')
+                 }
+             })
+         }
+         else{
+             layer.msg('信息填写不完整!')
+         }
+
+     })
+</script>
+</html>

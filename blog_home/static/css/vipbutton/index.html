@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html >
+<head>
+	<meta charset="UTF-8">
+	<title>手机app通用模板手机充值话费在线充值页面模板</title>
+
+
+	<link href="css/style.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<body>
+
+
+		
+
+		<div class="aui-current-box">
+			<a href="javascript:;" class="aui-current-item this-card">
+				<!-- <div class="aui-reset-tag"><img src="images/tag.png" alt=""></div> -->
+				<div class="aui-current-item-hd">
+					<h1>30元</h1>
+					<h2>促销价:29.01</h2>
+					<h3>原价:29.99</h3>
+				</div>
+			</a>
+			<a href="javascript:;" class="aui-current-item">
+
+				<div class="aui-current-item-hd">
+					<h1>50元</h1>
+					<h2>促销价:29.01</h2>
+					<h3>原价:29.99</h3>
+				</div>
+			</a>
+			<a href="javascript:;" class="aui-current-item ">
+
+				<div class="aui-current-item-hd">
+					<h1>100元</h1>
+					<h2>促销价:29.01</h2>
+					<h3>原价:29.99</h3>
+				</div>
+			</a>
+			<a href="javascript:;" class="aui-current-item">
+				<div class="aui-current-item-hd">
+					<h1>200元</h1>
+					<h2>促销价:29.01</h2>
+					<h3>原价:29.99</h3>
+				</div>
+			</a>
+			<a href="javascript:;" class="aui-current-item ">
+				<div class="aui-current-item-hd">
+					<h1>300元</h1>
+					<h2>促销价:29.01</h2>
+					<h3>原价:29.99</h3>
+				</div>
+			</a>
+			<a href="javascript:;" class="aui-current-item ">
+				<div class="aui-current-item-hd">
+					<h1>头条爽卡</h1>
+					<h3>全网流量1天1元</h3>
+				</div>
+			</a>
+
+	
+
+			<a href="javascript:;" class="aui-current-item">
+
+				<div class="aui-current-item-hd">
+					<h1>500M</h1>
+					<h2>促销价:29.01</h2>
+					<h3>原价:29.99</h3>
+				</div>
+			</a>
+			<a href="javascript:;" class="aui-current-item ">
+
+				<div class="aui-current-item-hd">
+					<h1>5G</h1>
+					<h2>促销价:29.01</h2>
+					<h3>原价:29.99</h3>
+				</div>
+			</a>
+
+			<a id="finally"  class="aui-current-item ">
+				<div class="aui-current-item-hd">
+					<h1 id="inputtext">自定义</h1>
+					<h3>全网流量1天1元</h3>
+				</div>
+			</a>
+
+
+			<div class="clearfix"></div>
+		</div>
+
+<script type="text/javascript">
+
+	$('.aui-current-item').click(function(e){
+
+		$(this).addClass('this-card').siblings().removeClass('this-card');
+
+		$('#type-amount').html($(this).find('.cardAmount').html());
+
+	})
+
+	$('#finally').click(function(){
+		var inp = $('<input type="text" class="nb" onkeyup="value=value.replace(/[^\\d]/g,\'\')" >')
+		if ($('.nb').val() == '' || $('.nb').val()){	
+			
+		}else{
+			$(this).find('h1').html(inp)
+		}
+
+		inp.blur(function(){
+			var thisval = $('.nb').val()
+			$('#inputtext').html(thisval)
+		})
+	})
+
+
+</script>
+</body>
+
+</html>

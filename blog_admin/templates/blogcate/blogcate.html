@@ -1,0 +1,366 @@
+{% extends '../base.html' %}
+{% load static %}
+{% load adminpagetag %}
+{% block title %}
+博客分类列表
+{% endblock %}
+
+{% block link %}
+ <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+
+  <!-- Bootstrap Core Css -->
+  <link href="{% static 'plugins/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+  <!-- Waves Effect Css -->
+  <link href="{% static 'plugins/node-waves/waves.css' %}" rel="stylesheet" />
+
+  <!-- Animation Css -->
+  <link href="{% static 'plugins/animate-css/animate.css' %}" rel="stylesheet" />
+
+  <!-- JQuery DataTable Css -->
+  <link href="{% static 'plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css' %}" rel="stylesheet" />
+
+  <!-- Custom Css -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+
+  <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+  <link href="{% static 'css/themes/all-themes.css' %}" rel="stylesheet" />
+<!-- Colorpicker Css -->
+    <link href="{% static 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css' %}" rel="stylesheet" />
+
+    <!-- Dropzone Css -->
+    <link href="{% static 'plugins/dropzone/dropzone.css' %}" rel="stylesheet">
+
+    <!-- Multi Select Css -->
+    <link href="{% static 'plugins/multi-select/css/multi-select.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Spinner Css -->
+    <link href="{% static 'plugins/jquery-spinner/css/bootstrap-spinner.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Tagsinput Css -->
+    <link href="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap Select Css -->
+    <link href="{% static 'plugins/bootstrap-select/css/bootstrap-select.css' %}" rel="stylesheet" />
+
+    <!-- noUISlider Css -->
+    <link href="{% static 'plugins/nouislider/nouislider.min.css' %}" rel="stylesheet" />
+{% endblock %}
+
+
+{% block main_body %}
+<div class="container-fluid">
+{% csrf_token %}
+	      <ol class="breadcrumb breadcrumb-bg-orange">
+				<li><a href="">首页</a></li>
+				<li class="active">博客分类</li>
+				</ol>
+        <!-- Basic Examples -->
+        <!-- Exportable Table -->
+        <!-- Basic Table -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header" >
+                        <h2 style="margin-top: 35px;margin-left: 20px">
+                            <strong><i class="material-icons" style="font-size: 25px">trending_up</i>&nbsp;&nbsp;   博客分类</strong>
+                            <small>博客分类相关路由权重信息</small>
+                        </h2>
+
+                         <form action="" method="GET">
+
+                          <div class="row clearfix" >
+                            <div class="col-md-3 col-md-push-8" style="margin-top: -20px">
+
+                              <div class="input-group" >
+
+                                <span class="input-group-addon" >
+                                    <i class="material-icons" style="font-size: 30px">trending_up</i>
+                                </span>
+
+                                <div class="form-line ">
+                                  <input type="text" class="form-control date" placeholder="搜索关键词" name="keywords" value="{{ keywords| default:'' }}">
+                                </div>
+
+                                <button type="submit" class="btn bg-red  waves-effect " style="margin-right: -80px;z-index: 9;float: right;width: 70px">
+
+                                    <i class="material-icons">search</i>&nbsp;查询
+
+                                </button>
+
+                              </div>
+
+                            </div>
+                          </div>
+                        </form>
+                    </div>
+                    <div class="body table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>分类名称</th>
+                                    <th>分类路由</th>
+                                    <th>展示优先级</th>
+                                    <th>启用状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for recode in all_result %}
+                                    <tr>
+                                        <th class="lid" scope="row">{{ recode.id }}</th>
+                                        <td class="lname">{{ recode.title }}</td>
+                                        <td class="lpath">{{ recode.path }}</td>
+                                        <td class="lorder">{{ recode.list_order }}</td>
+                                        <td>
+				                                    {% if recode.status == 1 %}
+						                                    <div class="switch cgsta" id="{{ recode.id }}">
+						                                        <label>开启<input type="checkbox" i_id="{{ recode.id }}" value="1" onclick="delfunc(this)" checked><span class="lever"></span>禁用</label>
+																								</div>
+		                                        {% else %}
+					                                      <div class="switch cgsta" id="{{ recode.id }}">
+						                                        <label>开启<input type="checkbox" i_id="{{ recode.id }}" value="1" onclick="delfunc(this)" ><span class="lever"></span>禁用</label>
+                                                          </div>
+		                                        {% endif %}
+		                                    </td>
+                                        <td>
+	                                        <button type="btn"  class="btn btn-warning btn-xs editbtn" data-toggle="modal" data-target=".bs-example-modal-lg" >编辑</button>&nbsp;&nbsp;&nbsp;
+
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <nav>
+                        <center>
+                           <ul class="pagination">
+                            {% PageShow totalpages request %}
+                           </ul>
+                        </center>
+
+                    </nav>
+                </div>
+            </div>
+        </div>
+</div>
+
+<!--模态-->
+<!-- Modal -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="myModal" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="background-color: rgba(0,0,0,0.3)">
+      <!--填充-->
+
+           <div class="container-fluid">
+               <div style="height: 15px;"></div>
+
+       <!-- 文章基础信息编辑 -->
+      <div class="row clearfix">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="card">
+                  <div class="body">
+                      <div class="header">
+                          <h2>
+                              <i class="material-icons" style="font-size: 20px">trending_up</i>&nbsp;&nbsp;博客分类基本信息
+                              <small>请在下方修改博客分类的基本信息</small>
+                          </h2>
+                      </div>
+                      <br>
+
+                        {% csrf_token %}
+                      <input hidden id="lid" name="cid" value="">
+
+
+
+                      <div class="row clearfix">
+                          <div class="col-md-6">
+                              <div class="input-group">
+                                  <span class="input-group-addon">
+                                      <i class="material-icons">trending_up</i>
+                                  </span>
+                                  <div class="form-line">
+                                      <input type="text" class="form-control date" id="lname" placeholder="博客分类名称" name="categorytitle" >
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row clearfix">
+                          <div class="col-md-6">
+                              <div class="input-group">
+                                  <span class="input-group-addon">
+                                      <i class="material-icons">trending_up</i>
+                                  </span>
+                                  <div class="form-line">
+                                      <input type="text" class="form-control date" id="lpath" placeholder="博客分类路由" name="path" >
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row clearfix">
+                          <div class="col-md-3">
+                            <p>
+                              <b>权重值（值越大，排名靠前）</b>
+                            </p>
+                              <div class="input-group spinner" data-trigger="spinner">
+                                  <div class="form-line">
+                                      <input type="text" class="form-control text-center" id="lorder" name="orderpoint" value="{{ current_category.list_order | default:0 }}" data-rule="listorder">
+                                  </div>
+                                  <span class="input-group-addon">
+                                      <a href="javascript:;" class="spin-up" data-spin="up"><i class="glyphicon glyphicon-chevron-up"></i></a>
+                                      <a href="javascript:;" class="spin-down" data-spin="down"><i class="glyphicon glyphicon-chevron-down"></i></a>
+                                  </span>
+                              </div>
+                          </div>
+                      </div>
+
+
+                      <div class="row clearfix">
+                          <div class="col-md-12">
+                              <button type="submit" id="cont" class="btn bg-red btn-block waves-effect" >提交</button>
+                          </div>
+                      </div>
+
+                      <!--</form>-->
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
+        <!--end填充-->
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block endlinks %}
+  <!-- Jquery Core Js -->
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+
+    <script async="" src="https://www.google-analytics.com/analytics.js"></script>
+    <script src="{% static 'plugins/bootstrap-notify/bootstrap-notify.js' %}"></script>
+    <script src="{% static 'js/pages/ui/dialogs.js' %}"></script>
+
+
+    <!-- Bootstrap Core Js -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.js' %}"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="{% static 'plugins/bootstrap-select/js/bootstrap-select.js' %}"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="{% static 'plugins/node-waves/waves.js' %}"></script>
+
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="{% static 'plugins/jquery-datatable/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/buttons.flash.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/jszip.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/pdfmake.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/vfs_fonts.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-datatable/extensions/export/buttons.print.min.js' %}"></script>
+
+   <!-- Bootstrap Colorpicker Js -->
+    <script src="{% static 'plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js' %}"></script>
+
+    <!-- Dropzone Plugin Js -->
+    <script src="{% static 'plugins/dropzone/dropzone.js' %}"></script>
+
+    <!-- Input Mask Plugin Js -->
+    <script src="{% static 'plugins/jquery-inputmask/jquery.inputmask.bundle.js' %}"></script>
+
+    <!-- Multi Select Plugin Js -->
+    <script src="{% static 'plugins/multi-select/js/jquery.multi-select.js' %}"></script>
+
+    <!-- Jquery Spinner Plugin Js -->
+    <script src="{% static 'plugins/jquery-spinner/js/jquery.spinner.js' %}"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="{% static 'plugins/node-waves/waves.js' %}"></script>
+
+    <!-- Ckeditor -->
+    <script src="{% static 'plugins/ckeditor/ckeditor.js' %}"></script>
+
+    <!-- Bootstrap Tags Input Plugin Js -->
+    <script src="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.js' %}"></script>
+
+    <!-- noUISlider Plugin Js -->
+
+    <!-- TinyMCE -->
+    <script src="{% static 'plugins/tinymce/tinymce.js' %}"></script>
+
+
+    <!-- Custom Js -->
+    <script src="{% static 'js/admin.js' %}"></script>
+    <script src="{% static 'js/pages/tables/jquery-datatable.js' %}"></script>
+		<script src="{% static 'js/delfunc.js' %}"></script>
+    <!-- Demo Js -->
+    <script src="{% static 'js/demo.js' %}"></script>
+<!--预留js-->
+  <script type="text/javascript">{{ jscode|default:"" |safe }}</script>
+<script>
+    $('.editbtn').bind('click',function () {
+        //取值
+        var lid = $(this).parents('tr').find('.lid').text();
+        var lname =  $(this).parents('tr').find('.lname').text();
+        var lpath =  $(this).parents('tr').find('.lpath').text();
+        var lorder =  $(this).parents('tr').find('.lorder').text();
+        //填值
+        $('#lid').val(lid);
+        $('#lname').val(lname);
+        $('#lpath').val(lpath);
+        $('#lorder').val(lorder);
+        flag=$(this)
+    });
+
+    $('#cont').click(function () {
+        var lid = $('#lid').val();
+        var lname = $('#lname').val();
+        var lpath = $('#lpath').val();
+        var lorder = $('#lorder').val();
+        var csrfToken = $('[name=csrfmiddlewaretoken]').val();
+        $.post("{% url 'blogcate:editblogcate' %}",
+            {csrfmiddlewaretoken:csrfToken,lid:lid,lname:lname,lpath:lpath,lorder:lorder},
+            function (data) {
+            if(data.msg =='修改成功'){
+            flag.parents('tr').find('.lname').html(lname);
+            flag.parents('tr').find('.lpath').html(lpath);
+            flag.parents('tr').find('.lorder').html(lorder);
+            swal("修改成功!", "修改信息已生效", "success");
+            }else{
+                swal("修改失败!",data.msg, "error");
+            }
+        });
+        $('#myModal').modal('hide')
+    })
+
+
+
+
+</script>
+
+
+
+{% endblock %}
